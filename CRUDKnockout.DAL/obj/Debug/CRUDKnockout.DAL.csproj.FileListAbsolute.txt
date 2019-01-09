@@ -1,0 +1,15 @@
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\CRUDKnockout.DAL.dll.config
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\CRUDKnockout.DAL.dll
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\CRUDKnockout.DAL.pdb
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\CRUDKnockout.Shared.dll
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\EntityFramework.dll
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\CRUDKnockout.Shared.pdb
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\EntityFramework.xml
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\obj\Debug\CRUDKnockout.DAL.csprojAssemblyReference.cache
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\obj\Debug\CRUDKnockout.DAL.csproj.CoreCompileInputs.cache
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\obj\Debug\CRUDKnockout.DAL.csproj.CopyComplete
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\obj\Debug\CRUDKnockout.DAL.dll
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\obj\Debug\CRUDKnockout.DAL.pdb
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.DAL\bin\Debug\CRUDKnockout.Shared.dll.config

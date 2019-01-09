@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Student Register";
+}
+
+<script src="~/Scripts/knockout-3.4.2.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Models/UserRegisterViewModel.js"></script>
+
+
+<div class="page-header">
+    <h2 class="text-center">User Registration</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h2 class="panel-title">Register new User</h2>
+            </div>
+
+            <div class="panel-body" data-bind="with: addUserViewModel">
+                @Html.Partial("_RegisterUser")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2 class="panel-title">Registerd Users</h2>
+            </div>
+            <div class="panel-body" data-bind="with: UserListViewModel">
+                @Html.Partial("_UsersList")
+            </div>
+        </div>
+    </div>
+
+</div>

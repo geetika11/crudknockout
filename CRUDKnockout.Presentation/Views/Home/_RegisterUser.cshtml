@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "_RegisterUser";
+}
+
+<form role="form">
+    <div class="form-group">
+        <label for="UserID">UserID</label>
+        <input id="UserID" type="text" class="form-control" data-bind="value: UserID" />
+    </div>
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input id="Name" type="text" class="form-control" data-bind="value: Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="Address">Address</label>
+        <input id="Address" type="text" class="form-control" data-bind="value: Address" />
+    </div>
+
+    <div class="form-group">
+        <label for="Age">Age</label>
+        <input id="Age" type="text" class="form-control" data-bind="value: Age" />
+    </div>
+
+    <div class="form-group">
+        <label for="Gender">Gender</label>
+        <select id="Gender" class="form-control" data-bind="options: genders, value: Gender"></select>
+
+    </div>
+
+    <div class="form-group">
+        <label for="PhoneNumber">Contact Number</label>
+        <input id="PhoneNumber" class="form-control" data-bind="value: PhoneNumber" />
+    </div>
+</form>
+
+<input type="button" id="btnAddUser" class="btn btn-primary" value="Add User" data-bind="click: addUser" /> 
