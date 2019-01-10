@@ -47,11 +47,22 @@ namespace CRUDKnockout.DAL.DBContext
                 dba.SaveChanges();
             }
         }
-        public void UpdateUser(int UserID, UserInformation user)
+        public void UpdateUser(int UserID, string Name, string Address, string PhoneNumber)
         {
+            UserInformation user = new UserInformation();
             var updateItem = dba.UserInformation.FirstOrDefault(c => c.UserID == UserID);
-            updateItem.Name = user.Name;
-         
+            if (Name != null)
+            {
+                updateItem.Name = Name;
+            }
+            if (Address != null)
+            {
+                updateItem.Address = Address;
+            }
+            if (user.PhoneNumber != null)
+            {
+                updateItem.PhoneNumber = user.PhoneNumber;
+            }
             dba.Entry(updateItem).State = System.Data.Entity.EntityState.Modified;
             dba.SaveChanges();
 

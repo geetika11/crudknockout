@@ -17,5 +17,7 @@ namespace CRUDKnockout.Business.BusinessObject
             IList<GetAllUsersDTO> gdto = dBContext.GetAllUsers();
             return gdto;
         }
+        
+
     }
 }

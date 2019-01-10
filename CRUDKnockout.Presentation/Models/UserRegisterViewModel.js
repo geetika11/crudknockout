@@ -80,7 +80,7 @@ function UserList() {
 
 
     self.EditUser = function (User) {
-        $(".bs-example-modal-sm").modal('show')
+        $(".focus").modal('show')
         self.EditName(User.Name())
         self.EditAddress(User.Address())
         self.EditPhoneNumber(User.PhoneNumber())
@@ -89,15 +89,26 @@ function UserList() {
 
 
     self.UpdatedUser = function () {
-        alert(self.EditName() + " Id: " + self.SeUserID() + " is ready to get updated");
+        // var dataObj = ko.toJSON(this);
+        var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };
+        alert(self.EditName() + " Id: " + self.SeUserID() + " is ready to get updated" + "value of dataobject" + dataObj.Name);
 
-        //    $.ajax({
-        //        url: '/api/updateuser/' + User.UserID(),
-        //        type: 'put',
-        //        contentType: 'application/json',
-        //        success: 'Ok'
-        //    //});
-        //)};
+        $.ajax({
+            url: '/api/updateuser/' + self.SeUserID(),
+            type: 'put',
+            data: JSON.stringify(dataObj),
+            contentType: 'application/json',
+            dataType: 'json',
+
+                //success: function (data) {
+                //    $.each(data, function (key, value) {
+
+                //        UserRegisterViewModel.UserListViewModel.users.push(new User(value.EditAddress));
+                //    })
+                    
+                //}
+            });
+      
     }
     self.Detail = function (User) {
         $(".fade").modal('show')

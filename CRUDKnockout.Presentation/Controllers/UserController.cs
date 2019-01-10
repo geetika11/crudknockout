@@ -1,6 +1,7 @@
 ﻿using CRUDKnockout.Business.BusinessObject;
 using CRUDKnockout.DAL;
 using CRUDKnockout.DAL.DBContext;
+using CRUDKnockout.Presentation.Models;
 using CRUDKnockout.Shared.DTO;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Script.Services;
+using System.Web.Services;
 
 namespace CRUDKnockout.Presentation.Controllers
 {
@@ -60,12 +63,15 @@ namespace CRUDKnockout.Presentation.Controllers
             var response = Request.CreateResponse(HttpStatusCode.OK, UserID);
             return response;
         }
+
         [Route("api/updateuser/{UserID}")]
-        public HttpResponseMessage Put(int UserID)
+    
+        public HttpResponseMessage Put(int UserID, UserModel user)
         {
-            UserInformation user = new UserInformation();
-            user.Name = "Geet";
-            udb.UpdateUser(UserID,user);
+            string Name = user.Name;
+            string Address = user.Address;
+            string PhoneNumber = user.PhoneNumber;
+            udb.UpdateUser(UserID,Name,Address,PhoneNumber);
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
 

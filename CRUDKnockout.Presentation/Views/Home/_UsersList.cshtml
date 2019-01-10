@@ -30,13 +30,13 @@
 </table>
 
 <br />
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal focus" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <h5> Update</h5>
-            <input type="text" data-bind="textInput:EditName">
-            <input type="text" data-bind="textInput:EditAddress">
-            <input type="text" data-bind="textInput:EditPhoneNumber">
+            <input type="text" data-bind="textInput:EditName" id="editname">
+            <input type="text" data-bind="textInput:EditAddress"id="editaddress">
+            <input type="text" data-bind="textInput:EditPhoneNumber" id=" editphonenumber">
             <input type="button" value="Update" data-bind="click:UpdatedUser">
         </div>
     </div>
