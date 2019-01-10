@@ -43,6 +43,7 @@ namespace CRUDKnockout.Presentation.Controllers
 
         //}
         // POST api/student
+
         public HttpResponseMessage Post(UserInformation user)
         {
             udb.InsertUser(user);
@@ -52,6 +53,23 @@ namespace CRUDKnockout.Presentation.Controllers
             return response;
         }
 
+        [Route("api/deleteuser/{UserID}")]
+        public HttpResponseMessage Delete(int UserID)
+        {
+            udb.DeleteUser(UserID);
+            var response = Request.CreateResponse(HttpStatusCode.OK, UserID);
+            return response;
+        }
+        [Route("api/updateuser/{UserID}")]
+        public HttpResponseMessage Put(int UserID)
+        {
+            UserInformation user = new UserInformation();
+            user.Name = "Geet";
+            udb.UpdateUser(UserID,user);
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            return response;
+
+        }
 
     }
 }

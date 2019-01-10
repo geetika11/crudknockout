@@ -24,11 +24,22 @@
             <td data-bind="text: Age"></td>
             <td data-bind="text: Gender"></td>
             <td data-bind="text: PhoneNumber"></td>
-            <td><input type="button" class="btn btn-danger btn-xs" value=" [x] delete " data-bind="click: $parent.removeUser" />
-                <input type="button" class="btn btn-primary btn-xs" value=" [x] Edit " data-bind="click: $parent.removeUser" />
+            <td><input type="button" class="btn btn-danger btn-xs" value=" [x] Delete " data-bind="click: $parent.removeUser" />
+                <input type="button" class="btn btn-primary btn-xs" value=" [x] Edit " data-bind="click: $parent.EditUser" />
             </td>
         </tr>
     </tbody>
 </table>
 
 <br />
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <h5> Update</h5>
+            <input type="text" data-bind="textInput:EditName">
+            <input type="text" data-bind="textInput:EditAddress">
+            <input type="text" data-bind="textInput:EditPhoneNumber">
+            <input type="button" value="Update" data-bind="click:UpdatedUser">
+        </div>
+    </div>
+</div>

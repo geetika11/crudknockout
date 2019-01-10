@@ -37,6 +37,27 @@ namespace CRUDKnockout.DAL.DBContext
             dba.SaveChanges();
         }
 
+        public  void DeleteUser(int UserID)
+        {
+            var deleteItem = dba.UserInformation.FirstOrDefault(c => c.UserID == UserID);
+
+            if (deleteItem != null)
+            {
+                dba.UserInformation.Remove(deleteItem);
+                dba.SaveChanges();
+            }
+        }
+        public void UpdateUser(int UserID, UserInformation user)
+        {
+            var updateItem = dba.UserInformation.FirstOrDefault(c => c.UserID == UserID);
+            updateItem.Name = user.Name;
+         
+            dba.Entry(updateItem).State = System.Data.Entity.EntityState.Modified;
+            dba.SaveChanges();
+
+          
+        }
+
     }
 
 }

@@ -30,7 +30,6 @@ function User(UserID, Name, Address, Age, Gender,PhoneNumber) {
             contentType: 'application/json',
             success: function (data) {
                 UserRegisterViewModel.UserListViewModel.users.push(new User(data.UserID, data.Name, data.Address, data.Age, data.Gender, data.PhoneNumber));
-
                 self.UserID(null);
                 self.Name('');
                 self.Address('');
@@ -49,7 +48,10 @@ function UserList() {
 
     // observable arrays are update binding elements upon array changes
     self.users = ko.observableArray([]);
-
+    self.EditName = ko.observable();
+    self.EditAddress = ko.observable();
+    self.EditPhoneNumber = ko.observable();
+    self.SeUserID = ko.observable();
     self.getUsers = function () {
         self.users.removeAll();
 
@@ -60,21 +62,41 @@ function UserList() {
             });
         });
     };
-
-
+    
+    
     //// remove student. current data context object is passed to function automatically.
-    //self.removeUser = function (student) {
-    //    $.ajax({
-    //        url: '/api/student/' + student.Id(),
-    //        type: 'delete',
-    //        contentType: 'application/json',
-    //        success: function () {
-    //            self.students.remove(student);
-    //        }
-    //    });
-    //};
-}
+    self.removeUser = function (User) {
+        $.ajax({
+            url: '/api/deleteuser/' + User.UserID(),
+            type: 'delete',
+            contentType: 'application/json',
+            success: function () {
+                self.users.remove(User);
+            }
+        });
+    };
+    
 
+    self.EditUser = function (User) {
+       
+        $(".bs-example-modal-sm").modal('show')
+        self.EditName(User.Name())
+        self.EditAddress(User.Address())
+        self.EditPhoneNumber(User.PhoneNumber())
+        self.SeUserID(User.UserID())
+    }
+    self.UpdatedUser = function () {
+        alert(self.EditName() + " Id: " + self.SeUserID()+ " is ready to get updated");
+
+        //    $.ajax({
+        //        url: '/api/updateuser/' + User.UserID(),
+        //        type: 'put',
+        //        contentType: 'application/json',
+        //        success: 'Ok'
+        //    //});
+        //)};
+    }
+}  
 
 // create index view view model which contain two models for partial views
 UserRegisterViewModel = { addUserViewModel: new User(),UserListViewModel: new UserList() };
