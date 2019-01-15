@@ -68,6 +68,11 @@ namespace CRUDKnockout.DAL.DBContext
 
           
         }
+        public void SearchUser(string SearchUser)
+        {
+            var user = dba.UserInformation.Where(ds => ds.Name.Contains(SearchUser));
+            var abc = user;
+        }
 
     }
 

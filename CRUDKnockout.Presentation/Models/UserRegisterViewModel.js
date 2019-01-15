@@ -4,7 +4,6 @@ var UserRegisterViewModel;
 // use as register student views view model
 function User(UserID, Name, Address, Age, Gender,PhoneNumber) {
     var self = this;
-
 //    // observable are update elements upon changes, also update on element data changes [two way binding]
     self.UserID = ko.observable(UserID);
     self.Name = ko.observable(Name);
@@ -38,9 +37,7 @@ function User(UserID, Name, Address, Age, Gender,PhoneNumber) {
 
 // use as student list view's view model
 function UserList() {
-
     var self = this;
-
     // observable arrays are update binding elements upon array changes
     self.users = ko.observableArray([]);
     self.EditName = ko.observable();
@@ -48,6 +45,7 @@ function UserList() {
     self.EditPhoneNumber = ko.observable();
     self.SeUserID = ko.observable();
 
+    self.SearchString = ko.observable();
     self.DetailName = ko.observable();
     self.DetailAddress = ko.observable();
     self.DetailAge = ko.observable();
@@ -89,26 +87,18 @@ function UserList() {
 
 
     self.UpdatedUser = function () {
-        // var dataObj = ko.toJSON(this);
+       
         var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };
-        alert(self.EditName() + " Id: " + self.SeUserID() + " is ready to get updated" + "value of dataobject" + dataObj.Name);
-
+      
         $.ajax({
             url: '/api/updateuser/' + self.SeUserID(),
             type: 'put',
             data: JSON.stringify(dataObj),
             contentType: 'application/json',
             dataType: 'json',
-
-                //success: function (data) {
-                //    $.each(data, function (key, value) {
-
-                //        UserRegisterViewModel.UserListViewModel.users.push(new User(value.EditAddress));
-                //    })
-                    
-                //}
-            });
-      
+           
+        });
+              
     }
     self.Detail = function (User) {
         $(".fade").modal('show')
@@ -117,6 +107,16 @@ function UserList() {
         self.DetailAge(User.Age())
         self.DetailGender(User.Gender())
         self.DetailPhoneNumber(User.PhoneNumber())
+    }
+
+    self.SearchUser = function () {
+        alert(typeof(self.SearchString()));
+        $.ajax({
+            url: '/api/searchuser/' + self.SearchString(),
+            type: 'put',           
+            contentType: 'application/json'          
+
+        });
     }
 }
 

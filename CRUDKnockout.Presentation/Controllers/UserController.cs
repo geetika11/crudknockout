@@ -76,6 +76,18 @@ namespace CRUDKnockout.Presentation.Controllers
             return response;
 
         }
+        [Route("api/searchuser/{SearchString}")]
+
+        public HttpResponseMessage Put(string SearchString)
+        {
+            
+            udb.SearchUser(SearchString);
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            return response;
+
+        }
+
+
 
     }
 }
