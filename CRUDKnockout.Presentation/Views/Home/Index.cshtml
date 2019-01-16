@@ -32,7 +32,22 @@
             <div class="panel-body" data-bind="with: UserListViewModel">
                 @Html.Partial("_UsersList")
             </div>
+
         </div>
     </div>
+    
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Search Users</h2>
+                </div>
+                <div class="panel-body" data-bind="with: searchViewModel">
+                    @Html.Partial("_SearchResult")
+                </div>
 
-</div>
+            </div>
+            </div>
+     
+
+    </div>
+

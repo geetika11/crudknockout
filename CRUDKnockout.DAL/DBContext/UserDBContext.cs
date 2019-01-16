@@ -68,10 +68,22 @@ namespace CRUDKnockout.DAL.DBContext
 
           
         }
-        public void SearchUser(string SearchUser)
+        public IList<GetAllUsersDTO> SearchUser(string SearchUser)
         {
-            var user = dba.UserInformation.Where(ds => ds.Name.Contains(SearchUser));
-            var abc = user;
+            IList<GetAllUsersDTO> userList = new List<GetAllUsersDTO>();
+            //  userList= dba.UserInformation.Where(ds => ds.Name.Contains(SearchUser));
+           userList= (from u in dba.UserInformation.Where(ds => ds.Name.Contains(SearchUser))
+                      select new GetAllUsersDTO()
+                     {
+                          UserID=u.UserID,
+                         Name = u.Name,
+                         Address=u.Address,
+                         Age = u.Age,
+                         Gender = u.Gender,
+                         PhoneNumber=u.PhoneNumber
+                         
+             }).ToList();
+            return userList;
         }
 
     }

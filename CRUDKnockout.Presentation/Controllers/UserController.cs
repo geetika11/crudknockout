@@ -25,28 +25,7 @@ namespace CRUDKnockout.Presentation.Controllers
             IList<GetAllUsersDTO> gd = ubc.GetAllUsers();
             return gd;
         }
-
-        //[HttpDelete]
-        //[Route("api/deleteuser/{UserID}")]
-        //public bool Delete(string UserID)
-        //{
-        //    return ubc.DeleteUser(UserID);
-        //}
-
-
-        //[HttpPut]
-        //[Route("api/edituser")]
-        //public bool Put([FromBody] NewUserModel model)
-        //{
-        //    NewTweetDTO dto = new NewTweetDTO();
-        //    dto.UserID = Guid.Parse(model.UserID);
-        //    dto.TweetID = model.TweetID;
-        //    dto.Message = model.Message;
-        //    return ubc.UpdateUser(dto);
-
-        //}
-        // POST api/student
-
+        
         public HttpResponseMessage Post(UserInformation user)
         {
             udb.InsertUser(user);
@@ -76,14 +55,16 @@ namespace CRUDKnockout.Presentation.Controllers
             return response;
 
         }
-        [Route("api/searchuser/{SearchString}")]
 
-        public HttpResponseMessage Put(string SearchString)
+        
+        [Route("api/searchuser/{SearchString}")]     
+        public IList<GetAllUsersDTO> Put(string SearchString)
         {
-            
-            udb.SearchUser(SearchString);
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            return response;
+
+            IList<GetAllUsersDTO> gd= udb.SearchUser(SearchString);
+            //var response = Request.CreateResponse(HttpStatusCode.OK);
+            // return response;
+            return gd;
 
         }
 

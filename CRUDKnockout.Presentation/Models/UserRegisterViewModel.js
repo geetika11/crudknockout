@@ -35,7 +35,7 @@ function User(UserID, Name, Address, Age, Gender,PhoneNumber) {
     };
 }
 
-// use as student list view's view model
+// use as user list view's view model
 function UserList() {
     var self = this;
     // observable arrays are update binding elements upon array changes
@@ -44,27 +44,21 @@ function UserList() {
     self.EditAddress = ko.observable();
     self.EditPhoneNumber = ko.observable();
     self.SeUserID = ko.observable();
-
-    self.SearchString = ko.observable();
     self.DetailName = ko.observable();
     self.DetailAddress = ko.observable();
     self.DetailAge = ko.observable();
     self.DetailGender = ko.observable();
     self.DetailPhoneNumber = ko.observable();
-
     self.getUsers = function () {
         self.users.removeAll();
-
-        // retrieve students list from server side and push each object to model's students list
+        // retrieve user list from server side and push each object to model's students list
         $.getJSON('/api/getallusers', function (data) {
             $.each(data, function (key, value) {
                 self.users.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
             });
         });
     };
-
-
-    //// remove student. current data context object is passed to function automatically.
+           //// remove user. current data context object is passed to function automatically.
     self.removeUser = function (User) {
         $.ajax({
             url: '/api/deleteuser/' + User.UserID(),
@@ -75,8 +69,6 @@ function UserList() {
             }
         });
     };
-
-
     self.EditUser = function (User) {
         $(".focus").modal('show')
         self.EditName(User.Name())
@@ -84,21 +76,15 @@ function UserList() {
         self.EditPhoneNumber(User.PhoneNumber())
         self.SeUserID(User.UserID())
     }
-
-
     self.UpdatedUser = function () {
-       
-        var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };
-      
+        var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };      
         $.ajax({
             url: '/api/updateuser/' + self.SeUserID(),
             type: 'put',
             data: JSON.stringify(dataObj),
             contentType: 'application/json',
-            dataType: 'json',
-           
-        });
-              
+            dataType: 'json',           
+        });              
     }
     self.Detail = function (User) {
         $(".fade").modal('show')
@@ -107,22 +93,37 @@ function UserList() {
         self.DetailAge(User.Age())
         self.DetailGender(User.Gender())
         self.DetailPhoneNumber(User.PhoneNumber())
-    }
-
-    self.SearchUser = function () {
-        alert(typeof(self.SearchString()));
-        $.ajax({
-            url: '/api/searchuser/' + self.SearchString(),
-            type: 'put',           
-            contentType: 'application/json'          
-
-        });
-    }
+    }    
 }
 
-// create index view view model which contain two models for partial views
-UserRegisterViewModel = { addUserViewModel: new User(),UserListViewModel: new UserList() };
+function SearchUsers(SearchString) {
+    var self = this;
+    self.users = ko.observableArray([]);
+    self.SearchString = ko.observable(SearchString);
+    self.SearchUser = function () {
+        self.users.removeAll();
+        var data = { SerchString: self.SearchString() }
 
+        $.ajax({
+            url: '/api/searchuser/' + self.SearchString(),
+            type: 'put',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (DATA) {
+              
+                $.each(DATA, function (key, value) {
+                    self.users.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
+                    });
+                
+               
+            }//end of success
+        })//end of ajax
+       
+    }
+}
+  
+// create index view view model which contain two models for partial views
+UserRegisterViewModel = { addUserViewModel: new User(), UserListViewModel: new UserList(), searchViewModel: new SearchUsers() };
 
 // on document ready
 $(document).ready(function () {
