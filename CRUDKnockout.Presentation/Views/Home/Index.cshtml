@@ -2,10 +2,14 @@
     ViewBag.Title = "Student Register";
 }
 
-<script src="~/Scripts/knockout-3.4.2.js"></script>
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script src="~/Models/UserRegisterViewModel.js"></script>
 
+<script src="~/Scripts/knockout-3.4.2.js"></script>
+<script src="~/Scripts/jquery-2.2.2.min.js"></script>
+<script src="~/Scripts/jquery.event.drag.js"></script>
+<script src="~/Scripts/jquery-ui-1.8.11.min.js"></script>
+<script src="~/Scripts/SlickGrid/slick.core.js"></script>
+<script src="~/Scripts/SlickGrid/slick.grid.js"></script>
+<script src="~/Models/UserRegisterViewModel.js"></script>
 
 <div class="page-header">
     <h2 class="text-center">User Registration</h2>
@@ -35,19 +39,30 @@
 
         </div>
     </div>
-    
-        <div class="col-md-8">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Search Users</h2>
-                </div>
-                <div class="panel-body" data-bind="with: searchViewModel">
-                    @Html.Partial("_SearchResult")
-                </div>
 
+    <div class="col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2 class="panel-title">Search Users</h2>
             </div>
+            <div class="panel-body" data-bind="with: searchViewModel">
+                @Html.Partial("_SearchResult")
             </div>
-     
 
+        </div>
     </div>
+    <div class="col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2 class="panel-title">Grid Users</h2>
+            </div>
+            <div class="panel-body" >
+                @Html.Partial("_GridTest")
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
 

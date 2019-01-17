@@ -1,6 +1,6 @@
 ﻿
 var UserRegisterViewModel;
-
+var grid;
 // use as register student views view model
 function User(UserID, Name, Address, Age, Gender,PhoneNumber) {
     var self = this;
@@ -110,20 +110,98 @@ function SearchUsers(SearchString) {
             data: JSON.stringify(data),
             contentType: 'application/json',
             success: function (DATA) {
-              
                 $.each(DATA, function (key, value) {
                     self.users.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
                     });
-                
-               
             }//end of success
         })//end of ajax
        
     }
 }
-  
+function GridTest() {
+    var self = this;
+    //var columns = [
+    //    { id: "ID", name: "ID", field: "ID" },
+    //    { id: "Name", name: "Name", field: "Name" },
+    //    { id: "Address", name: "Address", field: "Address" },
+    //    { id: "Age", name: "Age", field: "Age" },
+    //    { id: "Gender", name: "Gender", field: "Gender" },
+    //    { id: "PhoneNumber", name: "PhoneNumber", field: "PhoneNumber" }
+
+    //];
+    //var options = {
+    //    enableCellNavigation: true,
+    //    enableColumnReorder: false
+    //};
+
+
+    //self.slickdata = ko.observableArray([]);
+    ////self.users = ko.observableArray([]);
+    ////$.ajax({
+    ////    url: '/api/getallusers',
+    ////    type: 'get',        
+    ////    //contentType: 'application/json',
+    ////    success: function (DATA) {
+    ////        $.each(DATA, function (key, value) {
+    ////            self.users.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
+    ////        });
+    ////    }//end of success
+    ////})//end of ajax        
+    //$.getJSON('/api/getallusers', function (data) {
+    //    for (var i = 0; i < data.length; i++) {
+    //        slickdata[i] = {
+
+
+
+    //                ID: data[i].UserID,
+    //                Name: data[i].Name,
+    //                Address: data[i].Address,
+    //                Age: data[i].Age,
+    //                Gender: data[i].Gender,
+    //                PhoneNumber: data[i].PhoneNumber
+    //            };
+    //        }
+    //        //$.each(data, function (key, value) {
+
+    //        //   // console.log('value of value' + JSON.stringify(uvalue))
+    //        //    //var value = JSON.stringify(uvalue)               
+    //        //    self.slickdata.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
+
+    //        //});
+    //});
+    //console.log('value of slickdata' + slickdata)    
+    var columns = [
+        { id: "title", name: "Title", field: "title" },
+        { id: "duration", name: "Duration", field: "duration" },
+        { id: "%", name: "% Complete", field: "percentComplete" },
+        { id: "start", name: "Start", field: "start" },
+        { id: "finish", name: "Finish", field: "finish" },
+        { id: "effort-driven", name: "Effort Driven", field: "effortDriven" }
+    ];
+    var options = {
+        enableCellNavigation: true,
+        enableColumnReorder: false
+    };
+    $(function () {
+        var data = [];
+        for (var i = 0; i < 500; i++) {
+            data[i] = {
+                title: "Task " + i,
+                duration: "5 days",
+                percentComplete: Math.round(Math.random() * 100),
+                start: "01/01/2009",
+                finish: "01/05/2009",
+                effortDriven: (i % 5 == 0)
+            };
+        }
+
+        grid = new Slick.Grid("#myGrid", data, columns, options);
+    })
+}
+
+
 // create index view view model which contain two models for partial views
-UserRegisterViewModel = { addUserViewModel: new User(), UserListViewModel: new UserList(), searchViewModel: new SearchUsers() };
+UserRegisterViewModel = { addUserViewModel: new User(), UserListViewModel: new UserList(), searchViewModel: new SearchUsers()};
 
 // on document ready
 $(document).ready(function () {
@@ -133,4 +211,7 @@ $(document).ready(function () {
 
     // load student data
     UserRegisterViewModel.UserListViewModel.getUsers();
+    GridTest();
+   
+
 });
