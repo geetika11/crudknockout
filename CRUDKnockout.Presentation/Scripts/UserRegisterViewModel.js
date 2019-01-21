@@ -1,9 +1,9 @@
 ﻿var UserRegisterViewModel;
 var grid;
 
-function User(UserID, Name, Address, Age, Gender, PhoneNumber) {
+function User( Name, Address, Age, Gender, PhoneNumber) {
     var self = this;
-    self.UserID = ko.observable(UserID);    
+      
     self.Name = ko.observable(Name);
     self.Address = ko.observable(Address);
     self.Age = ko.observable(Age);
@@ -78,13 +78,15 @@ function User(UserID, Name, Address, Age, Gender, PhoneNumber) {
             data: dataObject,
             contentType: 'application/json',
             success: function (data) {
-                UserRegisterViewModel.UserListViewModel.users.push(new User(data.UserID, data.Name, data.Address, data.Age, data.Gender, data.PhoneNumber));
+                UserRegisterViewModel.UserListViewModel.users.push(new User(data.Name, data.Address, data.Age, data.Gender, data.PhoneNumber));
+                GridTest();
                 self.UserID(null);
                 self.Name('');
                 self.Address('');
                 self.Age(null);
                 self.Gender('');
                 self.PhoneNumber(null);
+
             }
         });
     }
@@ -109,7 +111,7 @@ function UserList() {
         // retrieve user list from server side and push each object to model's students list
         $.getJSON('/api/getallusers', function (data) {
             $.each(data, function (key, value) {
-                self.users.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
+                self.users.push(new User( value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
             });
         });
     };
@@ -166,7 +168,7 @@ function SearchUsers(SearchString) {
             contentType: 'application/json',
             success: function (DATA) {
                 $.each(DATA, function (key, value) {
-                    self.users.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
+                    self.users.push(new User( value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
                 });
             }//end of success
         })//end of ajax
@@ -176,19 +178,67 @@ function GridTest() {
     var self = this;
     
     var columns = [
-        { id: "UserID", name: "ID", field: "ID" },
         { id: "Name", name: "Name", field: "Name" },
         { id: "Address", name: "Address", field: "Address" },
         { id: "Age", name: "Age", field: "Age" },
         { id: "Gender", name: "Gender", field: "Gender" },
-        { id: "PhoneNumber", name: "PhoneNumber", field: "PhoneNumber" }
+        { id: "PhoneNumber", name: "PhoneNumber", field: "PhoneNumber" },
+        { id: "delete", name: "Action", width: 70, formatter: buttonFormatter },
+         { id: "edit", name: "Action", width: 70, formatter: button1Formatter }
+
     ];
+    function buttonFormatter(row, cell, value, columnDef, dataContext) {
+
+        var button = "<input value='delete 'class='del' onclick='DeleteData(" + dataContext.UserID + ")' type='button' id='deletebutton' />";
+
+        return button;
+    }
+    function button1Formatter(row, cell, value, columnDef, dataContext) {
+
+        var button = "<input value='edit 'class='del' onclick='EditData(" + dataContext.UserID + ")' type='button' id='deletebutton' />";
+
+        return button;
+    }
+    EditData = function (data) {
+      
+
+       // $(".focus").modal('show');
+      //  UserRegisterViewModel.UserListViewModel;
+        
+       
+      // var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };
+        $.ajax({
+          // url: '/api/updateuser/' + dataContext.UserID,
+            type: 'put',
+          //  data: JSON.stringify(dataObj),
+            contentType: 'application/json',
+            dataType: 'json',
+        });
+
+    }
+    DeleteData = function (id) {
+        $.ajax({
+            url: '/api/deleteuser/' + id,
+            type: 'delete',
+            contentType: 'application/json',
+            success: function () {
+                $.getJSON('/api/getallusers', function (data) {
+                    grid = new Slick.Grid("#myGrid", data, columns, options);
+                })
+            }
+        });
+        data.deleteItem(id);
+        data.refresh();
+    }
+
     var options = {
+        editable: true,
+      
         enableCellNavigation: true,
         enableColumnReorder: false
     };
     self.users = ko.observableArray([]);   
-
+   
     $.getJSON('/api/getallusers', function (data) {
         grid = new Slick.Grid("#myGrid", data, columns, options);
     })

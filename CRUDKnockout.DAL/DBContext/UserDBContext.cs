@@ -24,7 +24,7 @@ namespace CRUDKnockout.DAL.DBContext
                                 Name = u.Name,
                                 Age = u.Age,
                                 Gender = u.Gender,
-                               
+                               PhoneNumber=u.PhoneNumber
                             }).ToList();
 
                 if (userList.Count > 0)

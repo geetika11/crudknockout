@@ -19,6 +19,6 @@ namespace CRUDKnockout.DAL
         public string Address { get; set; }
         public string Age { get; set; }
         public string Gender { get; set; }
-        public Nullable<int> PhoneNumber { get; set; }
+        public int PhoneNumber { get; set; }
     }
 }
