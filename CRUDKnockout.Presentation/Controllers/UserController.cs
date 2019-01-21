@@ -5,70 +5,131 @@ using CRUDKnockout.Presentation.Models;
 using CRUDKnockout.Shared.DTO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Script.Services;
-using System.Web.Services;
 
 namespace CRUDKnockout.Presentation.Controllers
 {
+    /// <summary>
+    /// how can i improve this
+    /// </summary>
     public class UserController : ApiController
     {
-        UserBusinessContext ubc = new UserBusinessContext();
-        UserDBContext udb = new UserDBContext();
+        UserBusinessContext businessContext = new UserBusinessContext();
+        
         [HttpGet]
         [Route("api/getallusers")]
         public IList<GetAllUsersDTO> Get()
         {
-            IList<GetAllUsersDTO> gd = ubc.GetAllUsers();
-            return gd;
-        }
-        
-        public HttpResponseMessage Post(UserInformation user)
+            //where are the results visible?
+            IList<GetAllUsersDTO> usersList = businessContext.GetAllUsers();
+            if (usersList == null)
+            {
+                //var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                //{
+                //    ReasonPhrase = "User List is Empty"
+                //};
+                //return Request.CreateErrorResponse(HttpStatusCode.BadRequest,"null");
+                return null;
+            }
+            else
+            {
+                var response = Request.CreateResponse(HttpStatusCode.OK);
+                return usersList;
+            }         
+        }        
+        public HttpResponseMessage Post(UserDetail user)
         {
-            udb.InsertUser(user);
-            var response = Request.CreateResponse(HttpStatusCode.Created, user);
-            string url = Url.Link("DefaultApi", new { user.UserID });
-            response.Headers.Location = new Uri(url);
-            return response;
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            else if (user != null)
+            {
+                //how to reduce if else
+                bool userstatus = businessContext.InsertUser(user);
+                if (userstatus == true)
+                {
+                    var response = Request.CreateResponse(HttpStatusCode.Created, user);
+                    //  string url = Url.Link("DefaultApi", new { user.UserID });
+                    // response.Headers.Location = new Uri(url);
+                    return response;
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is not Added");
+                }
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is null");
+            }           
         }
 
         [Route("api/deleteuser/{UserID}")]
         public HttpResponseMessage Delete(int UserID)
         {
-            udb.DeleteUser(UserID);
-            var response = Request.CreateResponse(HttpStatusCode.OK, UserID);
-            return response;
+            
+            bool userstatus= businessContext.DeleteUser(UserID);
+            if (userstatus == true)
+            {
+                var response = Request.CreateResponse(HttpStatusCode.OK, UserID);
+                return response;
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is not found");
+            }
         }
 
         [Route("api/updateuser/{UserID}")]
     
-        public HttpResponseMessage Put(int UserID, UserModel user)
+        public IHttpActionResult Put(int UserID, UserModel user)
         {
-            string Name = user.Name;
-            string Address = user.Address;
-            string PhoneNumber = user.PhoneNumber;
-            udb.UpdateUser(UserID,Name,Address,PhoneNumber);
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            return response;
-
+          
+            if (user != null)
+            {
+                string Name = user.Name;
+                string Address = user.Address;
+                int PhoneNumber = user.PhoneNumber;
+                bool userstatus = businessContext.UpdateUser(UserID, Name, Address, PhoneNumber);
+                if (userstatus == true)
+                {
+                   return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.OK, "updated successfully"));
+                }
+                else
+                {
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Not found"));
+                }
+            }
+            else
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not found"));
+                // return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is empty");
+            }
         }
 
-        
-        [Route("api/searchuser/{SearchString}")]     
-        public IList<GetAllUsersDTO> Put(string SearchString)
+        [Route("api/searchuser/{SearchString}")]
+        public IHttpActionResult Put(string SearchString)
         {
-
-            IList<GetAllUsersDTO> gd= udb.SearchUser(SearchString);
-            //var response = Request.CreateResponse(HttpStatusCode.OK);
-            // return response;
-            return gd;
+            if (SearchString == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Search String is empty"));
+            }
+            else
+            {
+                IList<GetAllUsersDTO> usersList = businessContext.SearchUser(SearchString);
+                if (usersList != null)
+                {
+                    return Ok(usersList);
+                }
+                else
+                {
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "user list is empty"));
+                }
+            }
 
         }
-
-
-
     }
 }

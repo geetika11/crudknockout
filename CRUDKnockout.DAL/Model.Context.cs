@@ -25,6 +25,6 @@ namespace CRUDKnockout.DAL
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<UserInformation> UserInformation { get; set; }
+        public virtual DbSet<UserDetail> UserDetail { get; set; }
     }
 }

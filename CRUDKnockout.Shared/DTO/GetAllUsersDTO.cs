@@ -12,8 +12,8 @@ namespace CRUDKnockout.Shared.DTO
         public int UserID { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
-        public string PhoneNumber { get; set; }
-        public int Age { get; set; }
+        public int PhoneNumber { get; set; }
+        public string Age { get; set; }
         public string Gender { get; set; }
 
 

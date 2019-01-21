@@ -1,11 +1,9 @@
-﻿
-var UserRegisterViewModel;
+﻿var UserRegisterViewModel;
 var grid;
-// use as register student views view model
-function User(UserID, Name, Address, Age, Gender,PhoneNumber) {
+
+function User(UserID, Name, Address, Age, Gender, PhoneNumber) {
     var self = this;
-//    // observable are update elements upon changes, also update on element data changes [two way binding]
-    self.UserID = ko.observable(UserID);
+    self.UserID = ko.observable(UserID);    
     self.Name = ko.observable(Name);
     self.Address = ko.observable(Address);
     self.Age = ko.observable(Age);
@@ -16,7 +14,64 @@ function User(UserID, Name, Address, Age, Gender,PhoneNumber) {
         "Other"
     ];
     self.addUser = function () {
-        var dataObject = ko.toJSON(this);
+        var validation_holder = 0;
+        var checkNumber = 0;
+        var NameValue = $("#Name").val();
+        var AddressValue = $("#Address").val();
+        var AgeValue = $("#Age").val();
+        var NumberValue = $("#PhoneNumber").val();
+        var phone_regex = /^[0-9]{4,20}$/;
+        var checkAge = 0;
+        console.log('value of id name1' + NameValue)
+        if (NameValue == '') {
+            $("span.nameError").html("Name is required");
+            validation_holder = 0;
+        }
+        else {
+            $("span.nameError").html("")
+        }
+        if (AddressValue == '') {
+            $("span.addressError").html("Address is required");
+            validation_holder = 0;
+        }
+        else {
+            $("span.addressError").html("")
+        }
+        if (AgeValue == '') {
+            $("span.ageError").html("Age is required")
+            validation_holder = 0;
+        }
+        else {
+            if (AgeValue <= 0) {
+                $("span.ageError").html("Please enter valid age");
+                checkAge=0
+            }
+            else {
+                $("span.ageError").html("")
+                checkAge=1
+            }
+        }
+        if (NumberValue == '') {
+            $("span.numberError").html("Number is required");
+            validation_holder = 0;
+        }
+        else {
+            if (!phone_regex.test(NumberValue)) { // if invalid phone
+                $("span.numberError").html("Invalid Phone Number!");
+                validation_holder = 0;
+                checkNumber = 0;
+
+            } else {
+                $("span.numberError").html("");
+                checkNumber=1
+            }
+        }
+        if (NameValue != '' && AgeValue != '' && AddressValue != '' && NumberValue != '' && checkNumber == 1 && checkAge==1) {
+            validation_holder = 1;
+        }
+        
+        if (validation_holder == 1) {
+            var dataObject = ko.toJSON(this);
         $.ajax({
             url: '/api/user',
             type: 'post',
@@ -32,10 +87,10 @@ function User(UserID, Name, Address, Age, Gender,PhoneNumber) {
                 self.PhoneNumber(null);
             }
         });
+    }
     };
 }
 
-// use as user list view's view model
 function UserList() {
     var self = this;
     // observable arrays are update binding elements upon array changes
@@ -58,7 +113,7 @@ function UserList() {
             });
         });
     };
-           //// remove user. current data context object is passed to function automatically.
+    //// remove user. current data context object is passed to function automatically.
     self.removeUser = function (User) {
         $.ajax({
             url: '/api/deleteuser/' + User.UserID(),
@@ -77,14 +132,14 @@ function UserList() {
         self.SeUserID(User.UserID())
     }
     self.UpdatedUser = function () {
-        var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };      
+        var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };
         $.ajax({
             url: '/api/updateuser/' + self.SeUserID(),
             type: 'put',
             data: JSON.stringify(dataObj),
             contentType: 'application/json',
-            dataType: 'json',           
-        });              
+            dataType: 'json',
+        });
     }
     self.Detail = function (User) {
         $(".fade").modal('show')
@@ -93,7 +148,7 @@ function UserList() {
         self.DetailAge(User.Age())
         self.DetailGender(User.Gender())
         self.DetailPhoneNumber(User.PhoneNumber())
-    }    
+    }
 }
 
 function SearchUsers(SearchString) {
@@ -112,106 +167,37 @@ function SearchUsers(SearchString) {
             success: function (DATA) {
                 $.each(DATA, function (key, value) {
                     self.users.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
-                    });
+                });
             }//end of success
         })//end of ajax
-       
     }
 }
 function GridTest() {
     var self = this;
-    //var columns = [
-    //    { id: "ID", name: "ID", field: "ID" },
-    //    { id: "Name", name: "Name", field: "Name" },
-    //    { id: "Address", name: "Address", field: "Address" },
-    //    { id: "Age", name: "Age", field: "Age" },
-    //    { id: "Gender", name: "Gender", field: "Gender" },
-    //    { id: "PhoneNumber", name: "PhoneNumber", field: "PhoneNumber" }
-
-    //];
-    //var options = {
-    //    enableCellNavigation: true,
-    //    enableColumnReorder: false
-    //};
-
-
-    //self.slickdata = ko.observableArray([]);
-    ////self.users = ko.observableArray([]);
-    ////$.ajax({
-    ////    url: '/api/getallusers',
-    ////    type: 'get',        
-    ////    //contentType: 'application/json',
-    ////    success: function (DATA) {
-    ////        $.each(DATA, function (key, value) {
-    ////            self.users.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
-    ////        });
-    ////    }//end of success
-    ////})//end of ajax        
-    //$.getJSON('/api/getallusers', function (data) {
-    //    for (var i = 0; i < data.length; i++) {
-    //        slickdata[i] = {
-
-
-
-    //                ID: data[i].UserID,
-    //                Name: data[i].Name,
-    //                Address: data[i].Address,
-    //                Age: data[i].Age,
-    //                Gender: data[i].Gender,
-    //                PhoneNumber: data[i].PhoneNumber
-    //            };
-    //        }
-    //        //$.each(data, function (key, value) {
-
-    //        //   // console.log('value of value' + JSON.stringify(uvalue))
-    //        //    //var value = JSON.stringify(uvalue)               
-    //        //    self.slickdata.push(new User(value.UserID, value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
-
-    //        //});
-    //});
-    //console.log('value of slickdata' + slickdata)    
+    
     var columns = [
-        { id: "title", name: "Title", field: "title" },
-        { id: "duration", name: "Duration", field: "duration" },
-        { id: "%", name: "% Complete", field: "percentComplete" },
-        { id: "start", name: "Start", field: "start" },
-        { id: "finish", name: "Finish", field: "finish" },
-        { id: "effort-driven", name: "Effort Driven", field: "effortDriven" }
+        { id: "UserID", name: "ID", field: "ID" },
+        { id: "Name", name: "Name", field: "Name" },
+        { id: "Address", name: "Address", field: "Address" },
+        { id: "Age", name: "Age", field: "Age" },
+        { id: "Gender", name: "Gender", field: "Gender" },
+        { id: "PhoneNumber", name: "PhoneNumber", field: "PhoneNumber" }
     ];
     var options = {
         enableCellNavigation: true,
         enableColumnReorder: false
     };
-    $(function () {
-        var data = [];
-        for (var i = 0; i < 500; i++) {
-            data[i] = {
-                title: "Task " + i,
-                duration: "5 days",
-                percentComplete: Math.round(Math.random() * 100),
-                start: "01/01/2009",
-                finish: "01/05/2009",
-                effortDriven: (i % 5 == 0)
-            };
-        }
+    self.users = ko.observableArray([]);   
 
+    $.getJSON('/api/getallusers', function (data) {
         grid = new Slick.Grid("#myGrid", data, columns, options);
     })
 }
 
+UserRegisterViewModel = { addUserViewModel: new User(), UserListViewModel: new UserList(), searchViewModel: new SearchUsers() };
 
-// create index view view model which contain two models for partial views
-UserRegisterViewModel = { addUserViewModel: new User(), UserListViewModel: new UserList(), searchViewModel: new SearchUsers()};
-
-// on document ready
-$(document).ready(function () {
-
-    // bind view model to referring view
+$(document).ready(function () {    
     ko.applyBindings(UserRegisterViewModel);
-
-    // load student data
     UserRegisterViewModel.UserListViewModel.getUsers();
     GridTest();
-   
-
 });

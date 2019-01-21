@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="MVCCRUDKNOCKOUTModelStoreContainer" CdmEntityContainer="MVCCRUDKNOCKOUTEntities">
-    <EntitySetMapping Name="UserInformation">
-      <EntityTypeMapping TypeName="MVCCRUDKNOCKOUTModel.UserInformation">
-        <MappingFragment StoreEntitySet="UserInformation">
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
+    <EntitySetMapping Name="UserDetail">
+      <EntityTypeMapping TypeName="MVCCRUDKNOCKOUTModel.UserDetail">
+        <MappingFragment StoreEntitySet="UserDetail">
+          <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
           <ScalarProperty Name="Age" ColumnName="Age" />
           <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

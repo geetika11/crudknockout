@@ -3,24 +3,35 @@
     ViewBag.Title = "_RegisterUser";
 }
 
-<form role="form">
+<form role="form" name="registration">
+    
     <div class="form-group">
         <label for="UserID">UserID</label>
-        <input id="UserID" type="text" class="form-control" data-bind="value: UserID" />
+        <input id="UserID" type="text" class="form-control" required="required" data-bind="value: UserID" />
     </div>
-    <div class="form-group">    
-        <label for="Name">Name</label>
-        <input id="Name" type="text" class="form-control" data-bind="value: Name" />
+    <div class="form-group">
+        <p>
+            <label for="Name">Name</label>
+            <input id="Name" type="text" class="form-control" data-bind="value: Name" />
+            <span class="nameError"></span>
+        </p>
+
     </div>
 
     <div class="form-group">
-        <label for="Address">Address</label>
-        <input id="Address" type="text" class="form-control" data-bind="value: Address" />
+        <p>
+            <label for="Address">Address</label>
+            <input id="Address" type="text" class="form-control" data-bind="value: Address" />
+            <span class="addressError"></span>
+        </p>
     </div>
 
     <div class="form-group">
-        <label for="Age">Age</label>
-        <input id="Age" type="text" class="form-control" data-bind="value: Age" />
+        <p>
+            <label for="Age">Age</label>
+            <input id="Age" type="number" class="form-control" data-bind="value: Age" />
+            <span class="ageError"></span>
+        </p>
     </div>
 
     <div class="form-group">
@@ -30,8 +41,11 @@
     </div>
 
     <div class="form-group">
-        <label for="PhoneNumber">Contact Number</label>
-        <input id="PhoneNumber" class="form-control" data-bind="value: PhoneNumber" />
+        <p>
+            <label for="PhoneNumber">Contact Number</label>
+            <input id="PhoneNumber" class="form-control" required="required" data-bind="value: PhoneNumber" />
+            <span class="numberError"></span>
+        </p>
     </div>
 </form>
 

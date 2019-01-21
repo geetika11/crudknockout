@@ -1,4 +1,5 @@
 ﻿
+using CRUDKnockout.DAL.Exception;
 using CRUDKnockout.Shared.DTO;
 using System;
 using System.Collections.Generic;
@@ -8,84 +9,118 @@ using System.Threading.Tasks;
 
 namespace CRUDKnockout.DAL.DBContext
 {
-   public class UserDBContext
+   public class UserDBContext:IDisposable
     {
-
-      private  MVCCRUDKNOCKOUTEntities dba = new MVCCRUDKNOCKOUTEntities();
-
-
         public IList<GetAllUsersDTO> GetAllUsers()
         {
-            IList<GetAllUsersDTO> userList = new List<GetAllUsersDTO>();
-            userList = (from u in dba.UserInformation
-                        select new GetAllUsersDTO()
-                        {
-                            UserID = u.UserID,
-                            Address = u.Address,
-                            Name=u.Name,
-                            Age=u.Age,
-                            Gender=u.Gender,
-                            PhoneNumber=u.PhoneNumber
+            using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
+            {
+                IList<GetAllUsersDTO> userList = new List<GetAllUsersDTO>();
+                userList = (from u in dbEntities.UserDetail
+                            select new GetAllUsersDTO()
+                            {
+                                UserID = u.ID,
+                                Address = u.Address,
+                                Name = u.Name,
+                                Age = u.Age,
+                                Gender = u.Gender,
+                               
+                            }).ToList();
 
-                        }).ToList();
-
-            return userList;            
+                if (userList.Count > 0)
+                {
+                    return userList;
+                }
+                else
+                {
+                    return null;
+                }
+            }           
         }
-        public  void InsertUser(UserInformation user)
+        public bool InsertUser(UserDetail user)
         {
-            dba.UserInformation.Add(user);
-            dba.SaveChanges();
+            using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
+            {
+                
+                dbEntities.UserDetail.Add(user);
+                dbEntities.SaveChanges();
+                return true;
+            }
         }
 
-        public  void DeleteUser(int UserID)
+        public  bool DeleteUser(int UserID)
         {
-            var deleteItem = dba.UserInformation.FirstOrDefault(c => c.UserID == UserID);
-
-            if (deleteItem != null)
+            using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
-                dba.UserInformation.Remove(deleteItem);
-                dba.SaveChanges();
+                var deleteItem = dbEntities.UserDetail.FirstOrDefault(c => c.ID == UserID);
+
+                if (deleteItem != null)
+                {
+                    dbEntities.UserDetail.Remove(deleteItem);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+                else return false;
             }
         }
-        public void UpdateUser(int UserID, string Name, string Address, string PhoneNumber)
+        public bool UpdateUser(int UserID, string Name, string Address, int PhoneNumber)
         {
-            UserInformation user = new UserInformation();
-            var updateItem = dba.UserInformation.FirstOrDefault(c => c.UserID == UserID);
-            if (Name != null)
+            using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
-                updateItem.Name = Name;
+                UserDetail user = new UserDetail();
+                var updateItem = dbEntities.UserDetail.FirstOrDefault(c => c.ID == UserID);
+                if (Name != null)
+                {
+                    updateItem.Name = Name;
+                }
+                if (Address != null)
+                {
+                    updateItem.Address = Address;
+                }
+                if (user.PhoneNumber != null)
+                {
+                    updateItem.PhoneNumber = user.PhoneNumber;
+                }
+                dbEntities.Entry(updateItem).State = System.Data.Entity.EntityState.Modified;
+                dbEntities.SaveChanges();
+                return true;
             }
-            if (Address != null)
-            {
-                updateItem.Address = Address;
-            }
-            if (user.PhoneNumber != null)
-            {
-                updateItem.PhoneNumber = user.PhoneNumber;
-            }
-            dba.Entry(updateItem).State = System.Data.Entity.EntityState.Modified;
-            dba.SaveChanges();
-
           
         }
         public IList<GetAllUsersDTO> SearchUser(string SearchUser)
         {
-            IList<GetAllUsersDTO> userList = new List<GetAllUsersDTO>();
-            //  userList= dba.UserInformation.Where(ds => ds.Name.Contains(SearchUser));
-           userList= (from u in dba.UserInformation.Where(ds => ds.Name.Contains(SearchUser))
-                      select new GetAllUsersDTO()
-                     {
-                          UserID=u.UserID,
-                         Name = u.Name,
-                         Address=u.Address,
-                         Age = u.Age,
-                         Gender = u.Gender,
-                         PhoneNumber=u.PhoneNumber
-                         
-             }).ToList();
-            return userList;
+            using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
+            {
+                IList<GetAllUsersDTO> userList = new List<GetAllUsersDTO>();
+                //  userList= dba.UserDetail.Where(ds => ds.Name.Contains(SearchUser));
+                userList = (from u in dbEntities.UserDetail.Where(ds => ds.Name.Contains(SearchUser))
+                            select new GetAllUsersDTO()
+                            {
+                                UserID = u.ID,
+                                Name = u.Name,
+                                Address = u.Address,
+                                Age = u.Age,
+                                Gender = u.Gender,
+                               
+                            }).ToList();
+                if (userList.Count>0)
+                {
+                    return userList;
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
+        public void Dispose()
+        {
+            Dispose();
+            GC.SuppressFinalize(this);
+        }
+
+       
     }
 
 }
