@@ -20,7 +20,7 @@ namespace CRUDKnockout.Presentation.Controllers
         }
         public ActionResult _RegisterUser(EditUser eu)
         {
-            UserDetail user = userd.getUser(eu.ID);
+            UserDetail user = userd.getUser(eu.Name);
             return PartialView("_RegisterUser",user);
         }
     }

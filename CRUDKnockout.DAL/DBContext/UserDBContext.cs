@@ -114,11 +114,11 @@ namespace CRUDKnockout.DAL.DBContext
             }
         }
 
-        public UserDetail getUser(int id)
+        public UserDetail getUser(string id)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
-                UserDetail user = dbEntities.UserDetail.Where(ds => ds.ID == id).FirstOrDefault();
+                UserDetail user = dbEntities.UserDetail.Where(ds => ds.Name == id).FirstOrDefault();
                 return user;
             }
         }

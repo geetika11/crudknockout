@@ -80,14 +80,13 @@ function User( Name, Address, Age, Gender, PhoneNumber) {
             success: function (data) {
                 UserRegisterViewModel.UserListViewModel.users.push(new User(data.Name, data.Address, data.Age, data.Gender, data.PhoneNumber));
                 GridTest();
-                self.UserID(null);
+                
                 self.Name('');
                 self.Address('');
                 self.Age(null);
                 self.Gender('');
-                self.PhoneNumber(null);
-
-            }
+                self.PhoneNumber(null);            
+                            }
         });
     }
     };
@@ -127,7 +126,7 @@ function UserList() {
         });
     };
     self.EditUser = function (User) {
-        $(".focus").modal('show')
+      //  $(".focus").modal('show')
         self.EditName(User.Name())
         self.EditAddress(User.Address())
         self.EditPhoneNumber(User.PhoneNumber())
@@ -144,7 +143,7 @@ function UserList() {
         });
     }
     self.Detail = function (User) {
-        $(".fade").modal('show')
+       // $(".fade").modal('show')
         self.DetailName(User.Name())
         self.DetailAddress(User.Address())
         self.DetailAge(User.Age())
@@ -195,39 +194,32 @@ function GridTest() {
     }
     function button1Formatter(row, cell, value, columnDef, dataContext) {
 
-        var button = "<input value='edit 'class='del' onclick='EditData(" + dataContext.UserID + ")' type='button' id='deletebutton' />";
+        var button = "<input value='edit 'class='del' onclick='EditData(" + dataContext.UserID + ")' type='button'  />";
+        console.log('data context' + dataContext.Name)
 
         return button;
     }
-    EditData = function (id) {
-        console.log('hye entry'+ id);
-        $(".focus").modal('show')
-      
+    EditData = function (name) {
+        var o = new Object();
+        console.log('hye entry'+ name);
+        $(".fade").modal('show')
+        Name = ko.observable();
+        Name(name)
+        console.log('self.name(id) value ' + Name(name))
+       
         $.ajax({
             url: '/Home/_RegisterUser',           
             type: "post",
-            data: ({  ID: id }), 
+           data: ({  ID: name }), 
             contenttype: 'application/json',
             success: function (datas) {
                 console.log('data after clinet', datas)
                 console.log('data before clinet', $("#userList").html(datas)); 
+
             }, 
             
         })
         console.log('hye');
-
-       // $(".focus").modal('show');
-      //  UserRegisterViewModel.UserListViewModel;
-        
-       
-      // var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };
-        //$.ajax({
-        //  // url: '/api/updateuser/' + dataContext.UserID,
-        //    type: 'put',
-        //  //  data: JSON.stringify(dataObj),
-        //    contentType: 'application/json',
-        //    dataType: 'json',
-        //});
 
     }
     DeleteData = function (id) {
@@ -246,8 +238,7 @@ function GridTest() {
     }
 
     var options = {
-        editable: true,
-      
+        editable: true,      
         enableCellNavigation: true,
         enableColumnReorder: false
     };
