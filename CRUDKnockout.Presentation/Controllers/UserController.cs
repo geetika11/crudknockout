@@ -38,7 +38,9 @@ namespace CRUDKnockout.Presentation.Controllers
                 var response = Request.CreateResponse(HttpStatusCode.OK);
                 return usersList;
             }         
-        }        
+        }
+
+        [Route("api/user")]
         public HttpResponseMessage Post(UserDetail user)
         {
             if (!ModelState.IsValid)

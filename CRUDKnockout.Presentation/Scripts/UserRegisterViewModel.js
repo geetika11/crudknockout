@@ -159,7 +159,7 @@ function SearchUsers(SearchString) {
     self.SearchString = ko.observable(SearchString);
     self.SearchUser = function () {
         self.users.removeAll();
-        var data = { SerchString: self.SearchString() }
+        var data = { SearchString: self.SearchString() }
 
         $.ajax({
             url: '/api/searchuser/' + self.SearchString(),
@@ -199,21 +199,35 @@ function GridTest() {
 
         return button;
     }
-    EditData = function (data) {
+    EditData = function (id) {
+        console.log('hye entry'+ id);
+        $(".focus").modal('show')
       
+        $.ajax({
+            url: '/Home/_RegisterUser',           
+            type: "post",
+            data: ({  ID: id }), 
+            contenttype: 'application/json',
+            success: function (datas) {
+                console.log('data after clinet', datas)
+                console.log('data before clinet', $("#userList").html(datas)); 
+            }, 
+            
+        })
+        console.log('hye');
 
        // $(".focus").modal('show');
       //  UserRegisterViewModel.UserListViewModel;
         
        
       // var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };
-        $.ajax({
-          // url: '/api/updateuser/' + dataContext.UserID,
-            type: 'put',
-          //  data: JSON.stringify(dataObj),
-            contentType: 'application/json',
-            dataType: 'json',
-        });
+        //$.ajax({
+        //  // url: '/api/updateuser/' + dataContext.UserID,
+        //    type: 'put',
+        //  //  data: JSON.stringify(dataObj),
+        //    contentType: 'application/json',
+        //    dataType: 'json',
+        //});
 
     }
     DeleteData = function (id) {

@@ -114,6 +114,14 @@ namespace CRUDKnockout.DAL.DBContext
             }
         }
 
+        public UserDetail getUser(int id)
+        {
+            using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
+            {
+                UserDetail user = dbEntities.UserDetail.Where(ds => ds.ID == id).FirstOrDefault();
+                return user;
+            }
+        }
         public void Dispose()
         {
             Dispose();
