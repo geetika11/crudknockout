@@ -1,8 +1,6 @@
 ﻿@{
-    ViewBag.Title = "Student Register";
+    ViewBag.Title = "User Register";
 }
-
-
 <script src="~/Scripts/knockout-3.4.2.js"></script>
 <script src="~/Scripts/jquery-2.2.2.min.js"></script>
 <script src="~/Scripts/jquery.event.drag.js"></script>
@@ -28,17 +26,7 @@
         </div>
     </div>
 
-    <div class="col-md-8">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h2 class="panel-title">Registerd Users</h2>
-            </div>
-            <div class="panel-body" data-bind="with: UserListViewModel">
-                @Html.Partial("_UsersList")
-            </div>
-
-        </div>
-    </div>
+   
 
     <div class="col-md-8">
         <div class="panel panel-primary">

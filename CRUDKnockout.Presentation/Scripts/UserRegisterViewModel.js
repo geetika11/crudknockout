@@ -92,65 +92,7 @@ function User( Name, Address, Age, Gender, PhoneNumber) {
     };
 }
 
-function UserList() {
-    var self = this;
-    // observable arrays are update binding elements upon array changes
-    self.users = ko.observableArray([]);
-    self.EditName = ko.observable();
-    self.EditAddress = ko.observable();
-    self.EditPhoneNumber = ko.observable();
-    self.SeUserID = ko.observable();
-    self.DetailName = ko.observable();
-    self.DetailAddress = ko.observable();
-    self.DetailAge = ko.observable();
-    self.DetailGender = ko.observable();
-    self.DetailPhoneNumber = ko.observable();
-    self.getUsers = function () {
-        self.users.removeAll();
-        // retrieve user list from server side and push each object to model's students list
-        $.getJSON('/api/getallusers', function (data) {
-            $.each(data, function (key, value) {
-                self.users.push(new User( value.Name, value.Address, value.Age, value.Gender, value.PhoneNumber));
-            });
-        });
-    };
-    //// remove user. current data context object is passed to function automatically.
-    self.removeUser = function (User) {
-        $.ajax({
-            url: '/api/deleteuser/' + User.UserID(),
-            type: 'delete',
-            contentType: 'application/json',
-            success: function () {
-                self.users.remove(User);
-            }
-        });
-    };
-    self.EditUser = function (User) {
-      //  $(".focus").modal('show')
-        self.EditName(User.Name())
-        self.EditAddress(User.Address())
-        self.EditPhoneNumber(User.PhoneNumber())
-        self.SeUserID(User.UserID())
-    }
-    self.UpdatedUser = function () {
-        var dataObj = { Name: self.EditName(), Address: self.EditAddress(), PhoneNumber: self.EditPhoneNumber() };
-        $.ajax({
-            url: '/api/updateuser/' + self.SeUserID(),
-            type: 'put',
-            data: JSON.stringify(dataObj),
-            contentType: 'application/json',
-            dataType: 'json',
-        });
-    }
-    self.Detail = function (User) {
-       // $(".fade").modal('show')
-        self.DetailName(User.Name())
-        self.DetailAddress(User.Address())
-        self.DetailAge(User.Age())
-        self.DetailGender(User.Gender())
-        self.DetailPhoneNumber(User.PhoneNumber())
-    }
-}
+
 
 function SearchUsers(SearchString) {
     var self = this;
@@ -249,10 +191,10 @@ function GridTest() {
     })
 }
 
-UserRegisterViewModel = { addUserViewModel: new User(), UserListViewModel: new UserList(), searchViewModel: new SearchUsers() };
+UserRegisterViewModel = { addUserViewModel: new User(), searchViewModel: new SearchUsers() };
 
 $(document).ready(function () {    
     ko.applyBindings(UserRegisterViewModel);
-    UserRegisterViewModel.UserListViewModel.getUsers();
+  //  UserRegisterViewModel.UserListViewModel.getUsers();
     GridTest();
 });
