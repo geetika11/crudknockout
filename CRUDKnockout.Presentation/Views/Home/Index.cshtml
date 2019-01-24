@@ -8,8 +8,10 @@
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/SlickGrid/slick.core.js"></script>
 <script src="~/Scripts/SlickGrid/slick.grid.js"></script>
+<script src="~/Scripts/SlickGrid/slick.dataview.js"></script>
+<script src="~/Scripts/SlickGrid/Controls/slick.pager.js"></script>
+<script src="~/Scripts/SlickGrid/Plugins/slick.rowselectionmodel.js"></script>
 <script src="~/Scripts/UserRegisterViewModel.js"></script>
-
 <div class="page-header">
     <h2 class="text-center">User Registration</h2>
 </div>
@@ -26,7 +28,7 @@
         </div>
     </div>
 
-   
+
 
     <div class="col-md-8">
         <div class="panel panel-primary">
@@ -39,6 +41,7 @@
 
         </div>
     </div>
+
     <div class="col-md-8">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -48,5 +51,5 @@
                 @Html.Partial("_GridTest")
             </div>
         </div>
-    </div>
+    </div>  
 </div>

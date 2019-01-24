@@ -1,5 +1,6 @@
 ﻿var UserRegisterViewModel;
 var grid;
+var dataView;
 
 function User( Name, Address, Age, Gender, PhoneNumber) {
     var self = this;
@@ -78,21 +79,18 @@ function User( Name, Address, Age, Gender, PhoneNumber) {
             data: dataObject,
             contentType: 'application/json',
             success: function (data) {
-                UserRegisterViewModel.UserListViewModel.users.push(new User(data.Name, data.Address, data.Age, data.Gender, data.PhoneNumber));
-                GridTest();
-                
-                self.Name('');
-                self.Address('');
-                self.Age(null);
-                self.Gender('');
-                self.PhoneNumber(null);            
-                            }
+                //UserRegisterViewModel.UserListViewModel.users.push(new User(data.Name, data.Address, data.Age, data.Gender, data.PhoneNumber));
+                GridTest();                
+                //self.Name('');
+                //self.Address('');
+                //self.Age(null);
+                //self.Gender('');
+                //self.PhoneNumber(null);            
+            }
         });
     }
     };
 }
-
-
 
 function SearchUsers(SearchString) {
     var self = this;
@@ -115,9 +113,13 @@ function SearchUsers(SearchString) {
         })//end of ajax
     }
 }
+
 function GridTest() {
+  
+    var dataView;
     var self = this;
-    
+    var grid;
+    var data = [];
     var columns = [
         { id: "Name", name: "Name", field: "Name" },
         { id: "Address", name: "Address", field: "Address" },
@@ -125,46 +127,36 @@ function GridTest() {
         { id: "Gender", name: "Gender", field: "Gender" },
         { id: "PhoneNumber", name: "PhoneNumber", field: "PhoneNumber" },
         { id: "delete", name: "Action", width: 70, formatter: buttonFormatter },
-         { id: "edit", name: "Action", width: 70, formatter: button1Formatter }
-
+        { id: "edit", name: "Action", width: 70, formatter: button1Formatter }
     ];
     function buttonFormatter(row, cell, value, columnDef, dataContext) {
-
-        var button = "<input value='delete 'class='del' onclick='DeleteData(" + dataContext.UserID + ")' type='button' id='deletebutton' />";
-
+        var button = "<input value='delete 'class='del' onclick='DeleteData(" + dataContext.ID + ")' type='button' id='deletebutton' />";
         return button;
     }
     function button1Formatter(row, cell, value, columnDef, dataContext) {
-
-        var button = "<input value='edit 'class='del' onclick='EditData(" + dataContext.UserID + ")' type='button'  />";
-        console.log('data context' + dataContext.Name)
-
+        var button = "<input value='edit 'class='del' onclick='EditData(" + dataContext.ID + ")' type='button'  />";
         return button;
     }
     EditData = function (name) {
-        var o = new Object();
-        console.log('hye entry'+ name);
+        
+        console.log('hye entry' + name);
         $(".fade").modal('show')
         Name = ko.observable();
         Name(name)
-        console.log('self.name(id) value ' + Name(name))
-       
         $.ajax({
-            url: '/Home/_RegisterUser',           
+            url: '/Home/_RegisterUser',
             type: "post",
-           data: ({  ID: name }), 
+            data: ({ ID: name }),
             contenttype: 'application/json',
             success: function (datas) {
-                console.log('data after clinet', datas)
-                console.log('data before clinet', $("#userList").html(datas)); 
-
-            }, 
-            
+                //console.log('data after clinet', datas)
+                //console.log('data before clinet', $("#userList").html(datas));
+            },
         })
-        console.log('hye');
-
+       
     }
     DeleteData = function (id) {
+        console.log('value of id'+id)
         $.ajax({
             url: '/api/deleteuser/' + id,
             type: 'delete',
@@ -178,16 +170,27 @@ function GridTest() {
         data.deleteItem(id);
         data.refresh();
     }
-
-    var options = {
-        editable: true,      
+    var options = {       
         enableCellNavigation: true,
-        enableColumnReorder: false
     };
-    self.users = ko.observableArray([]);   
-   
-    $.getJSON('/api/getallusers', function (data) {
-        grid = new Slick.Grid("#myGrid", data, columns, options);
+    $(function () {
+        self.users = ko.observableArray([]);
+        $.getJSON('/api/getallusers', function (data) {           
+            dataView = new Slick.Data.DataView({ inlineFilters: true });
+            grid = new Slick.Grid("#myGrid", dataView, columns, options);
+            grid.setSelectionModel(new Slick.RowSelectionModel());
+            var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
+            dataView.onRowCountChanged.subscribe(function (e, args) {
+                grid.updateRowCount();
+                grid.render();
+            });
+            dataView.onRowsChanged.subscribe(function (e, args) {
+                grid.invalidateRows(args.rows);
+                grid.render();
+            });          
+            dataView.setItems(data, "ID");           
+         
+        })
     })
 }
 
@@ -195,6 +198,5 @@ UserRegisterViewModel = { addUserViewModel: new User(), searchViewModel: new Sea
 
 $(document).ready(function () {    
     ko.applyBindings(UserRegisterViewModel);
-  //  UserRegisterViewModel.UserListViewModel.getUsers();
     GridTest();
 });

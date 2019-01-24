@@ -3,10 +3,13 @@ using CRUDKnockout.DAL;
 using CRUDKnockout.DAL.DBContext;
 using CRUDKnockout.Presentation.Models;
 using CRUDKnockout.Shared.DTO;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace CRUDKnockout.Presentation.Controllers
@@ -17,10 +20,15 @@ namespace CRUDKnockout.Presentation.Controllers
     public class UserController : ApiController
     {
         UserBusinessContext businessContext = new UserBusinessContext();
-        
+       
+        //public class ReturnedStruct
+        //{
+        //    public int Total { get; set; }
+        //    public string Rows { get; set; }
+        //}
         [HttpGet]
         [Route("api/getallusers")]
-        public IList<GetAllUsersDTO> Get()
+        public IList<GetAllUsersDTO> Get( )
         {
             //where are the results visible?
             IList<GetAllUsersDTO> usersList = businessContext.GetAllUsers();
@@ -35,7 +43,20 @@ namespace CRUDKnockout.Presentation.Controllers
             }
             else
             {
+
                 var response = Request.CreateResponse(HttpStatusCode.OK);
+                //HttpContext context=new HttpContext(HttpRequest req, HttpResponse res);
+                //context.Response.ContentType = "text/plain";
+                //context.Response.Charset = "utf-8";
+                //int pageSize = Convert.ToInt32(context.Request["pageSize"] ?? "10");
+                //int pageIndex = Convert.ToInt32(context.Request["pageIndex"] ?? "1");
+                //int offset = (pageIndex - 1) * pageSize;
+                //string rows = JsonConvert.SerializeObject(usersList.Skip(offset).Take(pageSize).ToList());
+                //int count = usersList.Count;
+                //string returnedValue = JsonConvert.SerializeObject(new ReturnedStruct { Total = count, Rows = rows });
+                //System.Threading.Thread.Sleep(2000);
+                //context.Response.Write(returnedValue);
+                //context.Response.Flush();
                 return usersList;
             }         
         }

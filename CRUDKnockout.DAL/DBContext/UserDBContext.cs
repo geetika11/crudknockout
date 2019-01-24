@@ -19,13 +19,14 @@ namespace CRUDKnockout.DAL.DBContext
                 userList = (from u in dbEntities.UserDetail
                             select new GetAllUsersDTO()
                             {
-                                UserID = u.ID,
+                                ID = u.ID,
                                 Address = u.Address,
                                 Name = u.Name,
                                 Age = u.Age,
                                 Gender = u.Gender,
                                PhoneNumber=u.PhoneNumber
                             }).ToList();
+                var abc = userList.Count;
 
                 if (userList.Count > 0)
                 {
@@ -77,7 +78,7 @@ namespace CRUDKnockout.DAL.DBContext
                 {
                     updateItem.Address = Address;
                 }
-                if (user.PhoneNumber != null)
+                if (user.PhoneNumber != 0)
                 {
                     updateItem.PhoneNumber = user.PhoneNumber;
                 }
@@ -96,7 +97,7 @@ namespace CRUDKnockout.DAL.DBContext
                 userList = (from u in dbEntities.UserDetail.Where(ds => ds.Name.Contains(SearchUser))
                             select new GetAllUsersDTO()
                             {
-                                UserID = u.ID,
+                                ID = u.ID,
                                 Name = u.Name,
                                 Address = u.Address,
                                 Age = u.Age,
