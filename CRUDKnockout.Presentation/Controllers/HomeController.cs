@@ -1,6 +1,8 @@
-﻿using CRUDKnockout.DAL;
+﻿using AutoMapper;
+using CRUDKnockout.DAL;
 using CRUDKnockout.DAL.DBContext;
 using CRUDKnockout.Presentation.Models;
+using CRUDKnockout.Shared.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,22 @@ namespace CRUDKnockout.Presentation.Controllers
 {
     public class HomeController : Controller
     {
-        UserDBContext userd = new UserDBContext();
+        IMapper userMapper,pageMapper;
+        UserDBContext userDbContext = new UserDBContext();
+        public HomeController()
+        {
+            var conf = new MapperConfiguration(cfg =>
+              {
+                  cfg.CreateMap<UserPaginationDTO, UserPaginationModel>();
+              });
+            userMapper = new Mapper(conf);
+            var conf1 = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UserPaginationDTO, PageModel>();
+            });
+            pageMapper = new Mapper(conf1);
+        }
+
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
@@ -20,8 +37,29 @@ namespace CRUDKnockout.Presentation.Controllers
         }
         public ActionResult _RegisterUser(EditUser eu)
         {
-            UserDetail user = userd.getUser(eu.Name);
-            return PartialView("_RegisterUser",user);
+            UserDetail user = userDbContext.getUser(eu.ID);
+            UserModel userModel = new UserModel();
+            userModel.Address = user.Address;
+            userModel.Age = user.Age;
+            userModel.Gender = user.Gender;
+            userModel.Name = user.Name;
+            userModel.PhoneNumber = user.PhoneNumber;
+            return PartialView("_RegisterUser",userModel);
         }
+        
+        [HttpPost]
+        public JsonResult _GridTest(PageModel pm)
+        {
+            if (pm.ID == 0)
+            {
+                pm.ID = 1;
+            }
+            
+            var dto1 = userDbContext.getTenUser(pm.ID);
+           pm = pageMapper.Map<UserPaginationDTO, PageModel>(dto1);            
+            return Json(pm, JsonRequestBehavior.AllowGet);
+        }
+       
+
     }
 }

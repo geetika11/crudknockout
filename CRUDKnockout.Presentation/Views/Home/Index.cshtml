@@ -9,9 +9,8 @@
 <script src="~/Scripts/SlickGrid/slick.core.js"></script>
 <script src="~/Scripts/SlickGrid/slick.grid.js"></script>
 <script src="~/Scripts/SlickGrid/slick.dataview.js"></script>
-<script src="~/Scripts/SlickGrid/Controls/slick.pager.js"></script>
-<script src="~/Scripts/SlickGrid/Plugins/slick.rowselectionmodel.js"></script>
 <script src="~/Scripts/UserRegisterViewModel.js"></script>
+
 <div class="page-header">
     <h2 class="text-center">User Registration</h2>
 </div>
@@ -27,9 +26,6 @@
             </div>
         </div>
     </div>
-
-
-
     <div class="col-md-8">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -38,18 +34,17 @@
             <div class="panel-body" data-bind="with: searchViewModel">
                 @Html.Partial("_SearchResult")
             </div>
-
         </div>
     </div>
-
     <div class="col-md-8">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h2 class="panel-title">Grid Users</h2>
+                <h2 class="panel-title">Search Users</h2>
             </div>
             <div class="panel-body">
                 @Html.Partial("_GridTest")
             </div>
         </div>
-    </div>  
+    </div>
+
 </div>

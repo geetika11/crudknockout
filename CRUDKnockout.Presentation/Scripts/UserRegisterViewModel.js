@@ -14,6 +14,10 @@ function User( Name, Address, Age, Gender, PhoneNumber) {
         "Female",
         "Other"
     ];
+
+    self.editUser = function () {
+
+    }
     self.addUser = function () {
         var validation_holder = 0;
         var checkNumber = 0;
@@ -23,7 +27,6 @@ function User( Name, Address, Age, Gender, PhoneNumber) {
         var NumberValue = $("#PhoneNumber").val();
         var phone_regex = /^[0-9]{4,20}$/;
         var checkAge = 0;
-        console.log('value of id name1' + NameValue)
         if (NameValue == '') {
             $("span.nameError").html("Name is required");
             validation_holder = 0;
@@ -79,13 +82,12 @@ function User( Name, Address, Age, Gender, PhoneNumber) {
             data: dataObject,
             contentType: 'application/json',
             success: function (data) {
-                //UserRegisterViewModel.UserListViewModel.users.push(new User(data.Name, data.Address, data.Age, data.Gender, data.PhoneNumber));
-                GridTest();                
-                //self.Name('');
-                //self.Address('');
-                //self.Age(null);
-                //self.Gender('');
-                //self.PhoneNumber(null);            
+                GridUser();                
+                self.Name('');
+                self.Address('');
+                self.Age(null);
+                self.Gender('');
+                self.PhoneNumber(null);            
             }
         });
     }
@@ -114,12 +116,10 @@ function SearchUsers(SearchString) {
     }
 }
 
-function GridTest() {
+function GridUser() {
   
-    var dataView;
     var self = this;
     var grid;
-    var data = [];
     var columns = [
         { id: "Name", name: "Name", field: "Name" },
         { id: "Address", name: "Address", field: "Address" },
@@ -156,47 +156,42 @@ function GridTest() {
        
     }
     DeleteData = function (id) {
-        console.log('value of id'+id)
+       
         $.ajax({
             url: '/api/deleteuser/' + id,
             type: 'delete',
             contentType: 'application/json',
             success: function () {
-                $.getJSON('/api/getallusers', function (data) {
-                    grid = new Slick.Grid("#myGrid", data, columns, options);
+                $.ajax({
+                    url: '/Home/_GridTest',
+                    type: "post",
+                    data: ({ ID: 0 }),
+                    success: function (datas) {
+                        grid = new Slick.Grid("#myGrid", datas.User, columns, options);
+                    }
                 })
             }
-        });
-        data.deleteItem(id);
-        data.refresh();
+        });       
     }
     var options = {       
         enableCellNavigation: true,
     };
     $(function () {
-        self.users = ko.observableArray([]);
-        $.getJSON('/api/getallusers', function (data) {           
-            dataView = new Slick.Data.DataView({ inlineFilters: true });
-            grid = new Slick.Grid("#myGrid", dataView, columns, options);
-            grid.setSelectionModel(new Slick.RowSelectionModel());
-            var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
-            dataView.onRowCountChanged.subscribe(function (e, args) {
-                grid.updateRowCount();
-                grid.render();
-            });
-            dataView.onRowsChanged.subscribe(function (e, args) {
-                grid.invalidateRows(args.rows);
-                grid.render();
-            });          
-            dataView.setItems(data, "ID");           
-         
-        })
+        $.ajax 
+            ({
+                url: '/Home/_GridTest',
+                type: "post",
+                data: ({ID:0}),
+                contenttype: 'application/json',
+                success: function (datas) {
+                    grid = new Slick.Grid("#myGrid", datas.User, columns, options);                    
+            }
+            })
     })
 }
 
 UserRegisterViewModel = { addUserViewModel: new User(), searchViewModel: new SearchUsers() };
-
 $(document).ready(function () {    
     ko.applyBindings(UserRegisterViewModel);
-    GridTest();
+    GridUser();
 });

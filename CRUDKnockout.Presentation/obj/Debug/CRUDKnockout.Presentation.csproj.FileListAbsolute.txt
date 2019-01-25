@@ -108,3 +108,8 @@ C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.Presentation\bin
 C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.Presentation\bin\CRUDKnockout.Business.dll.config
 C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.Presentation\bin\CRUDKnockout.Shared.dll.config
 C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.Presentation\bin\EntityFramework.SqlServer.xml
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.Presentation\bin\AutoMapper.dll
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.Presentation\bin\System.ValueTuple.dll
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.Presentation\bin\AutoMapper.pdb
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.Presentation\bin\AutoMapper.xml
+C:\Users\geetikavarshney\source\repos\CRUDKnockout\CRUDKnockout.Presentation\bin\System.ValueTuple.xml

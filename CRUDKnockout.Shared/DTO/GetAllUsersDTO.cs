@@ -16,6 +16,5 @@ namespace CRUDKnockout.Shared.DTO
         public string Age { get; set; }
         public string Gender { get; set; }
 
-
     }
 }

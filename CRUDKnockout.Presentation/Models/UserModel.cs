@@ -16,6 +16,8 @@ namespace CRUDKnockout.Presentation.Models
         [RegularExpression(@"\^[0-9]{4,20}$", ErrorMessage = "Please enter a valid Mobile Number")]
         public int PhoneNumber { get; set; }
         [Required]
-        public int Age { get; set; }
+        public string Age { get; set; }
+        public int ID { get; set; }
+        public string Gender { get; set; }
     }
 }

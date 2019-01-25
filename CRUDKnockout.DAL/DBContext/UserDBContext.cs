@@ -115,14 +115,41 @@ namespace CRUDKnockout.DAL.DBContext
             }
         }
 
-        public UserDetail getUser(string id)
+        public UserDetail getUser(int id)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
-                UserDetail user = dbEntities.UserDetail.Where(ds => ds.Name == id).FirstOrDefault();
+                UserDetail user = dbEntities.UserDetail.Where(ds => ds.ID == id).FirstOrDefault();
                 return user;
             }
         }
+        public UserPaginationDTO getTenUser(int currentPage)
+        {
+            int maxRows = 10;
+            using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
+            {
+                UserPaginationDTO userPaginationDTO = new UserPaginationDTO();
+               // userPaginationDTO = dbEntities.UserDetail.OrderBy(ds => ds.ID).Skip((currentPage - 1) * maxRows).Take(maxRows);
+                userPaginationDTO.User = (from ds in dbEntities.UserDetail
+                                     select new GetAllUsersDTO() {
+                                     ID=ds.ID,
+                                     Address=ds.Address,
+                                     Age=ds.Age,
+                                     Name=ds.Name,
+                                     Gender=ds.Gender,
+                                     PhoneNumber=ds.PhoneNumber})                                                
+                            .OrderBy(ds => ds.ID)
+                            .Skip((currentPage - 1) * maxRows)
+                            .Take(maxRows).ToList();
+
+                double pageCount = (double)(dbEntities.UserDetail.Count() / Convert.ToDecimal(maxRows));
+                userPaginationDTO.PageCount = (int)Math.Ceiling(pageCount);
+                userPaginationDTO.CurrentPage = currentPage;
+                return userPaginationDTO;
+            }
+
+        }
+
         public void Dispose()
         {
             Dispose();

@@ -7,6 +7,7 @@ namespace CRUDKnockout.Presentation.Models
 {
     public class EditUser
     {
-        public string Name { get; set; }
+        public int ID { get; set; }
+        
     }
 }
