@@ -65,7 +65,7 @@ namespace CRUDKnockout.DAL.DBContext
             }
         }
 
-        public void update(int id, UserDetail user)
+        public void update(int id, GetAllUsersDTO user)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {

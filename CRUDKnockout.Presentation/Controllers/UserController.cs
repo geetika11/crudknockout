@@ -67,7 +67,7 @@ namespace CRUDKnockout.Presentation.Controllers
         }
         [HttpPost]
         [Route("api/edituser/{ID}")]
-        public void PutCustomer(int ID, UserDetail user)
+        public void PutCustomer(int ID, UserModel user)
         {
             if (!ModelState.IsValid)
             {
@@ -79,7 +79,15 @@ namespace CRUDKnockout.Presentation.Controllers
                // return BadRequest();
             }
             UserDBContext userdb = new UserDBContext();
-            userdb.update(ID, user);
+            GetAllUsersDTO updateduser = new GetAllUsersDTO();
+            updateduser.Address = user.Address;
+            updateduser.Age = user.Age;
+            updateduser.ID = ID;
+            updateduser.Name = user.Name;
+            updateduser.PhoneNumber = user.PhoneNumber;
+            updateduser.Gender = user.Gender;
+
+            userdb.update(ID, updateduser);
            // return StatusCode(HttpStatusCode.NoContent);
         }
 

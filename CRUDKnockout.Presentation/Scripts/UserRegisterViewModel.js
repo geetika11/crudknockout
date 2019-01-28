@@ -7,8 +7,10 @@ function User(Name, Address, Age, Gender, PhoneNumber) {
     self.Address = ko.observable(Address);
     self.Age = ko.observable(Age);
     self.Gender = ko.observable(Gender);
-    self.PhoneNumber = ko.observable(PhoneNumber);   
+    self.PhoneNumber = ko.observable(PhoneNumber); 
+    self.eligible = ko.observable(true);
     self.addUser = function () {
+       
         var validation_holder = 0;
         var checkNumber = 0;
         var NameValue = $("#Name").val();
@@ -141,8 +143,7 @@ function GridUser() {
         return button;
     }
         DetailData = function (data) {
-        self.Name(data.Name);
-          //console.log('++++++++++++++++++++' + data.ID)
+       
         UserRegisterViewModel.tempUser = data;
         $.ajax({
             url: '/Home/_RegisterUser',
@@ -150,14 +151,20 @@ function GridUser() {
             data: ({ ID: data.ID }),
             contenttype: 'application/json',
             success: function (datas) {
-                console.log('data beofre addition ', datas)
-                var newdata = '<div class="modal fade" role="dialog" aria-labelledby="mySmallModalLabel" tabindex="-1"style="width:400px;height:500px;align-items:center"> <div class="modal-dialog modal-sm" role="document"><div class="modal-content" data-bind="with: $data.tempUser">' + datas + '</div></div></div>';
+                var newdata = '<div class="modal fade" role="dialog" aria-labelledby="mySmallModalLabel" tabindex="-1"style="width:400px;height:500px;align-items:center"> <div class="modal-dialog modal-sm" role="document"><div class="modal-content" data-bind="with: $data.tempUser"><button type="button" class="close" data-dismiss="modal">&times;</button>' + datas + '</div></div></div>';
                 var ele = document.getElementById("div1")
                 ele.innerHTML = newdata;
+                eligible = ko.observable(false);
+                addUser = function () {}
                 $("#div1 .modal").on('show.bs.modal', function () {
                     ko.applyBindings(UserRegisterViewModel, $('#div1 .modal')[0]);
                 });
                 $(".fade").modal('show')
+                //$(".fade").mouseout(function () {
+                //    $(this).stop().animate({ width: '95px', height:'700px' }, { queue: false, duration: 250 })
+                //})
+
+                $(".fade").mouseover(function () { $(this).css("pointer-events","none")})
             },
         })
     }
@@ -169,9 +176,13 @@ function GridUser() {
                 data: ({ ID: data.ID}),
                 contenttype: 'application/json',
                 success: function (datas) {
-                    var newdata = '<div class="modal fade" role="dialog" aria-labelledby="mySmallModalLabel" tabindex="-1"style="width:400px;height:500px;align-items:center"> <div class="modal-dialog modal-sm" role="document"><div class="modal-content" data-bind="with: $data.tempUser"><button type="button" class="close" data-dismiss="modal">&times;</button>' + datas + '<input type="button"  class="btn btn-primary" value="Edit User" data-bind="click: updateuser" /></div></div></div> ';
+                    var newdata = '<div class="modal fade"  role="dialog" aria-labelledby="mySmallModalLabel" tabindex="-1"style="width:400px;height:500px;align-items:center"> <div class="modal-dialog modal-sm" role="document"><div class="modal-content" data-bind="with: $data.tempUser"><button type="button" class="close" data-dismiss="modal">&times;</button>' + datas + '<input type="button"  class="btn btn-primary" value="Edit User" data-bind="click: updateuser" /></div></div></div> ';
                     var ele = document.getElementById("div1")
                     ele.innerHTML = newdata;
+                    eligible = ko.observable(false);
+                    addUser = function () {
+                      
+                    }
                     updateuser = function () {
                         var dataObject = ko.toJSON(this);
                         console.log('value of data object iside update user' + dataObject)
@@ -182,7 +193,8 @@ function GridUser() {
                             data: dataObject,
                             contentType: 'application/json',
                             success: function (data) {
-                                console.log('geetika hye')
+                                alert('User updated successfully')
+                                $(".fade").modal('hide');
                             }
                         });
                     }
@@ -190,7 +202,6 @@ function GridUser() {
                         ko.applyBindings(UserRegisterViewModel, $('#div1 .modal')[0]);
                     });
                     $(".fade").modal('show')
-                   
                 },
             })
         }
