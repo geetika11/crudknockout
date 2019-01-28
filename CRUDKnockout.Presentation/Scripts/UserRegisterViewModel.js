@@ -1,6 +1,8 @@
 ﻿var UserRegisterViewModel;
 var grid;
 var dataView;
+
+//add the user
 function User(Name, Address, Age, Gender, PhoneNumber) {
     var self = this;
     self.Name = ko.observable(Name);
@@ -10,7 +12,6 @@ function User(Name, Address, Age, Gender, PhoneNumber) {
     self.PhoneNumber = ko.observable(PhoneNumber); 
     self.eligible = ko.observable(true);
     self.addUser = function () {
-       
         var validation_holder = 0;
         var checkNumber = 0;
         var NameValue = $("#Name").val();
@@ -18,7 +19,7 @@ function User(Name, Address, Age, Gender, PhoneNumber) {
         var AddressValue = $("#Address").val();
         var AgeValue = $("#Age").val();
         var NumberValue = $("#PhoneNumber").val();
-        var phone_regex = /^[0-9]{4,20}$/;
+        var phone_regex = /^[0-9]{10}$/;
         var checkAge = 0;
         if (NameValue == '') {
             $("span.nameError").html("Name is required");
@@ -46,7 +47,7 @@ function User(Name, Address, Age, Gender, PhoneNumber) {
             validation_holder = 0;
         }
         else {
-            if (AgeValue <= 0) {
+            if (AgeValue <= 0 || AgeValue>=120) {
                 $("span.ageError").html("Please enter valid age");
                 checkAge = 0
             }
@@ -73,7 +74,6 @@ function User(Name, Address, Age, Gender, PhoneNumber) {
         if (NameValue != '' && GenderValue!='' && AgeValue != '' && AddressValue != '' && NumberValue != '' && checkNumber == 1 && checkAge == 1) {
             validation_holder = 1;
         }
-
         if (validation_holder == 1) {
             var dataObject = ko.toJSON(this);
             $.ajax({
@@ -88,23 +88,23 @@ function User(Name, Address, Age, Gender, PhoneNumber) {
                     self.Age(null);
                     self.Gender('');
                     self.PhoneNumber(null);
+                    alert('user added successfully')
                 }
             });
         }
     };
 }
+
+//to search the user
 function SearchUsers(SearchString) {
     var self = this;
     self.users = ko.observableArray([]);
     self.SearchString = ko.observable(SearchString);
     self.SearchUser = function () {
         self.users.removeAll();
-        var data = { SearchString: self.SearchString() }
-
-        $.ajax({
+            $.ajax({
             url: '/api/searchuser/' + self.SearchString(),
             type: 'put',
-            data: JSON.stringify(data),
             contentType: 'application/json',
             success: function (DATA) {
                 $.each(DATA, function (key, value) {
@@ -114,6 +114,8 @@ function SearchUsers(SearchString) {
         })//end of ajax
     }
 }
+
+//grid showing all the users
 function GridUser() {    
         var self = this;
         self.Name = ko.observable();
@@ -124,26 +126,31 @@ function GridUser() {
             { id: "Age", name: "Age", field: "Age" },
             { id: "Gender", name: "Gender", field: "Gender" },
             { id: "PhoneNumber", name: "PhoneNumber", field: "PhoneNumber" },
-            { id: "delete", name: "Action", width: 70, formatter: buttonFormatter },
-            { id: "edit", name: "Action", width: 70, formatter: button1Formatter },
-            { id: "detail", name: "Action", width: 70, formatter: button2Formatter }
-        ];
-        function buttonFormatter(row, cell, value, columnDef, dataContext) {
-            var button = "<input value='delete 'class='del' onclick='DeleteData(" + dataContext.ID + ")' type='button' id='deletebutton' />";
-            return button;
-        }
-        function button1Formatter(row, cell, value, columnDef, dataContext) {
-            console.log(JSON.stringify(dataContext) + "value of datacontext")
-            var button = "<input value='edit 'class='del' onclick='EditData(" + JSON.stringify(dataContext) + ")' type='button'  />";
+            { id: "delete", name: "Action", width: 70, formatter: deleteUser }, //formatter is a function
+            { id: "edit", name: "Action", width: 70, formatter: editUser },
+            { id: "detail", name: "Detail", width: 70, formatter: detailedUser }
+    ];
+
+        //to delete the user
+        function deleteUser(row, cell, value, columnDef, dataContext) {
+                var button = "<input value='Delete' onclick='DeleteData(" + dataContext.ID + ")' type='button' id='deletebutton'/>";
+                return button;
+    }
+
+        //to edit the user
+        function editUser(row, cell, value, columnDef, dataContext) {
+                var button = "<input value='Edit' onclick='EditData(" + JSON.stringify(dataContext) + ")' type='button'  />";
+                return button;
+    }
+
+        //to get the details of the user
+        function detailedUser(row, cell, value, columnDef, dataContext) {
+            var button = "<input value='Detail' onclick='Detail(" + JSON.stringify(dataContext) + ")' type='button'  />";
             return button;
     }
-        function button2Formatter(row, cell, value, columnDef, dataContext) {
-        console.log(JSON.stringify(dataContext) + "value of datacontext")
-        var button = "<input value='Detail 'class='del' onclick='DetailData(" + JSON.stringify(dataContext) + ")' type='button'  />";
-        return button;
-    }
-        DetailData = function (data) {
-       
+
+        //on click of detail button
+        Detail = function (data) {
         UserRegisterViewModel.tempUser = data;
         $.ajax({
             url: '/Home/_RegisterUser',
@@ -155,19 +162,20 @@ function GridUser() {
                 var ele = document.getElementById("div1")
                 ele.innerHTML = newdata;
                 eligible = ko.observable(false);
-                addUser = function () {}
+                addUser = function () { }
+                //occurs when the modal is about to be shown
                 $("#div1 .modal").on('show.bs.modal', function () {
                     ko.applyBindings(UserRegisterViewModel, $('#div1 .modal')[0]);
                 });
+                //to open the modal
                 $(".fade").modal('show')
-                //$(".fade").mouseout(function () {
-                //    $(this).stop().animate({ width: '95px', height:'700px' }, { queue: false, duration: 250 })
-                //})
-
+                //to disable the mouse
                 $(".fade").mouseover(function () { $(this).css("pointer-events","none")})
             },
         })
     }
+
+        //on click of edit button
         EditData = function (data) {
             UserRegisterViewModel.tempUser = data;
             $.ajax({
@@ -180,13 +188,9 @@ function GridUser() {
                     var ele = document.getElementById("div1")
                     ele.innerHTML = newdata;
                     eligible = ko.observable(false);
-                    addUser = function () {
-                      
-                    }
+                    addUser = function () {}
                     updateuser = function () {
                         var dataObject = ko.toJSON(this);
-                        console.log('value of data object iside update user' + dataObject)
-                        console.log('ifefkjefk' + data.ID)
                         $.ajax({
                             url: '/api/edituser/' + data.ID,
                             type:"post",
@@ -204,9 +208,9 @@ function GridUser() {
                     $(".fade").modal('show')
                 },
             })
-        }
+    }
+         //on click of delete button
         DeleteData = function (id) {
-
             $.ajax({
                 url: '/api/deleteuser/' + id,
                 type: 'delete',
@@ -225,7 +229,8 @@ function GridUser() {
         }
         var options = {
             enableCellNavigation: true,
-        };
+    }; //why to give options and wht do you mean by enalb e cell navigation
+
         $(function () {
             $.ajax
                 ({
@@ -239,9 +244,11 @@ function GridUser() {
                 })
         })   
 }
+//assigning the value to the user register view model
+UserRegisterViewModel = { searchViewModel: new SearchUsers(), editViewModel: new User(), tempUser: new User() };
 
-UserRegisterViewModel = { searchViewModel: new SearchUsers(), editViewModel: new User(), tempUser:new User() };
+//Document Object Model (DOM) is ready for JavaScript code to execute.
 $(document).ready(function () {    
     ko.applyBindings(UserRegisterViewModel);
-   GridUser();
+    GridUser();
 });

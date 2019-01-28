@@ -13,7 +13,7 @@ namespace CRUDKnockout.Presentation.Models
         [Required]
         public string Address { get; set; }
         [Required]
-        [RegularExpression(@"\^[0-9]{4,20}$", ErrorMessage = "Please enter a valid Mobile Number")]
+        [RegularExpression(@"\^[0-9]{10}$", ErrorMessage = "Please enter a valid Mobile Number")]
         public int PhoneNumber { get; set; }
         [Required]
         public string Age { get; set; }

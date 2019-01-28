@@ -92,34 +92,6 @@ namespace CRUDKnockout.Presentation.Controllers
         }
 
 
-        //[Route("api/edituser")]
-        //public HttpResponseMessage P(UserDetail user)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-        //    }
-        //    else if (user != null)
-        //    {
-        //        //how to reduce if else
-        //        bool userstatus = businessContext.InsertUser(user);
-              
-        //        if (userstatus == true)
-        //        {
-        //            var response = Request.CreateResponse(HttpStatusCode.Created, user);
-        //            return response;
-        //        }
-        //        else
-        //        {
-        //            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is not Added");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is null");
-        //    }
-        //}
-
         [Route("api/deleteuser/{UserID}")]
         public HttpResponseMessage Delete(int UserID)
         {
@@ -136,32 +108,7 @@ namespace CRUDKnockout.Presentation.Controllers
             }
         }
 
-        //[Route("api/updateuser/{UserID}")]    
-        //public IHttpActionResult Put(int UserID, UserModel user)
-        //{
-          
-        //    if (user != null)
-        //    {
-        //        string Name = user.Name;
-        //        string Address = user.Address;
-        //        int PhoneNumber = user.PhoneNumber;
-        //        bool userstatus = businessContext.UpdateUser(UserID, Name, Address, PhoneNumber);
-        //        if (userstatus == true)
-        //        {
-        //           return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.OK, "updated successfully"));
-        //        }
-        //        else
-        //        {
-        //            return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Not found"));
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not found"));
-        //        // return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is empty");
-        //    }
-        //}
-
+        
         [Route("api/searchuser/{SearchString}")]
         public IHttpActionResult Put(string SearchString)
         {
