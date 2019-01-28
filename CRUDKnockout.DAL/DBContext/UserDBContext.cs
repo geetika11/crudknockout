@@ -64,30 +64,22 @@ namespace CRUDKnockout.DAL.DBContext
                 else return false;
             }
         }
-        public bool UpdateUser(int UserID, string Name, string Address, int PhoneNumber)
+
+        public void update(int id, UserDetail user)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
-                UserDetail user = new UserDetail();
-                var updateItem = dbEntities.UserDetail.FirstOrDefault(c => c.ID == UserID);
-                if (Name != null)
-                {
-                    updateItem.Name = Name;
-                }
-                if (Address != null)
-                {
-                    updateItem.Address = Address;
-                }
-                if (user.PhoneNumber != 0)
-                {
-                    updateItem.PhoneNumber = user.PhoneNumber;
-                }
+                var updateItem = dbEntities.UserDetail.FirstOrDefault(c => c.ID == id);
+                updateItem.Address = user.Address;
+                updateItem.Age = user.Age;
+                updateItem.Name = user.Name;
+                updateItem.PhoneNumber = user.PhoneNumber;
+                updateItem.Gender = user.Gender;
                 dbEntities.Entry(updateItem).State = System.Data.Entity.EntityState.Modified;
                 dbEntities.SaveChanges();
-                return true;
             }
-          
         }
+        
         public IList<GetAllUsersDTO> SearchUser(string SearchUser)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())

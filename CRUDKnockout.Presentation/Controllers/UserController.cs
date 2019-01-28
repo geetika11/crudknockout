@@ -21,11 +21,6 @@ namespace CRUDKnockout.Presentation.Controllers
     {
         UserBusinessContext businessContext = new UserBusinessContext();
        
-        //public class ReturnedStruct
-        //{
-        //    public int Total { get; set; }
-        //    public string Rows { get; set; }
-        //}
         [HttpGet]
         [Route("api/getallusers")]
         public IList<GetAllUsersDTO> Get( )
@@ -34,29 +29,11 @@ namespace CRUDKnockout.Presentation.Controllers
             IList<GetAllUsersDTO> usersList = businessContext.GetAllUsers();
             if (usersList == null)
             {
-                //var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-                //{
-                //    ReasonPhrase = "User List is Empty"
-                //};
-                //return Request.CreateErrorResponse(HttpStatusCode.BadRequest,"null");
                 return null;
             }
             else
             {
-
                 var response = Request.CreateResponse(HttpStatusCode.OK);
-                //HttpContext context=new HttpContext(HttpRequest req, HttpResponse res);
-                //context.Response.ContentType = "text/plain";
-                //context.Response.Charset = "utf-8";
-                //int pageSize = Convert.ToInt32(context.Request["pageSize"] ?? "10");
-                //int pageIndex = Convert.ToInt32(context.Request["pageIndex"] ?? "1");
-                //int offset = (pageIndex - 1) * pageSize;
-                //string rows = JsonConvert.SerializeObject(usersList.Skip(offset).Take(pageSize).ToList());
-                //int count = usersList.Count;
-                //string returnedValue = JsonConvert.SerializeObject(new ReturnedStruct { Total = count, Rows = rows });
-                //System.Threading.Thread.Sleep(2000);
-                //context.Response.Write(returnedValue);
-                //context.Response.Flush();
                 return usersList;
             }         
         }
@@ -75,8 +52,7 @@ namespace CRUDKnockout.Presentation.Controllers
                 if (userstatus == true)
                 {
                     var response = Request.CreateResponse(HttpStatusCode.Created, user);
-                    //  string url = Url.Link("DefaultApi", new { user.UserID });
-                    // response.Headers.Location = new Uri(url);
+                   
                     return response;
                 }
                 else
@@ -89,6 +65,52 @@ namespace CRUDKnockout.Presentation.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is null");
             }           
         }
+        [HttpPost]
+        [Route("api/edituser/{ID}")]
+        public void PutCustomer(int ID, UserDetail user)
+        {
+            if (!ModelState.IsValid)
+            {
+               // return BadRequest(ModelState);
+            }
+
+            if (ID != user.ID)
+            {
+               // return BadRequest();
+            }
+            UserDBContext userdb = new UserDBContext();
+            userdb.update(ID, user);
+           // return StatusCode(HttpStatusCode.NoContent);
+        }
+
+
+        //[Route("api/edituser")]
+        //public HttpResponseMessage P(UserDetail user)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+        //    }
+        //    else if (user != null)
+        //    {
+        //        //how to reduce if else
+        //        bool userstatus = businessContext.InsertUser(user);
+              
+        //        if (userstatus == true)
+        //        {
+        //            var response = Request.CreateResponse(HttpStatusCode.Created, user);
+        //            return response;
+        //        }
+        //        else
+        //        {
+        //            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is not Added");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is null");
+        //    }
+        //}
 
         [Route("api/deleteuser/{UserID}")]
         public HttpResponseMessage Delete(int UserID)
@@ -106,32 +128,31 @@ namespace CRUDKnockout.Presentation.Controllers
             }
         }
 
-        [Route("api/updateuser/{UserID}")]
-    
-        public IHttpActionResult Put(int UserID, UserModel user)
-        {
+        //[Route("api/updateuser/{UserID}")]    
+        //public IHttpActionResult Put(int UserID, UserModel user)
+        //{
           
-            if (user != null)
-            {
-                string Name = user.Name;
-                string Address = user.Address;
-                int PhoneNumber = user.PhoneNumber;
-                bool userstatus = businessContext.UpdateUser(UserID, Name, Address, PhoneNumber);
-                if (userstatus == true)
-                {
-                   return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.OK, "updated successfully"));
-                }
-                else
-                {
-                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Not found"));
-                }
-            }
-            else
-            {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not found"));
-                // return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is empty");
-            }
-        }
+        //    if (user != null)
+        //    {
+        //        string Name = user.Name;
+        //        string Address = user.Address;
+        //        int PhoneNumber = user.PhoneNumber;
+        //        bool userstatus = businessContext.UpdateUser(UserID, Name, Address, PhoneNumber);
+        //        if (userstatus == true)
+        //        {
+        //           return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.OK, "updated successfully"));
+        //        }
+        //        else
+        //        {
+        //            return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Not found"));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not found"));
+        //        // return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is empty");
+        //    }
+        //}
 
         [Route("api/searchuser/{SearchString}")]
         public IHttpActionResult Put(string SearchString)
@@ -152,7 +173,6 @@ namespace CRUDKnockout.Presentation.Controllers
                     return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "user list is empty"));
                 }
             }
-
         }
     }
 }

@@ -43,18 +43,7 @@ namespace CRUDKnockout.Business.BusinessObject
                 bool userstatus = dBContext.DeleteUser(UserID);
                 return true;            
         }
-        public bool UpdateUser(int UserID, string Name, string Address, int PhoneNumber)
-        {
-            bool userstatus = dBContext.UpdateUser(UserID, Name, Address, PhoneNumber);
-            if (userstatus == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+       
         public IList<GetAllUsersDTO> SearchUser(string SearchString)
         {
             IList<GetAllUsersDTO> usersList = dBContext.SearchUser(SearchString);

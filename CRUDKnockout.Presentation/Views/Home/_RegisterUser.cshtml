@@ -1,97 +1,40 @@
-﻿@model CRUDKnockout.Presentation.Models.UserModel
-
+﻿
 @{
     ViewBag.Title = "_RegisterUser";
 }
 
-<div class="modal fade" role="dialog" aria-labelledby="mySmallModalLabel" tabindex="-1" id="userList" style="width:400px;height:500px;align-items:center">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-        </div>
-    </div>
-</div>
-
-<div class="form-group">
+<div id="div1"></div>
+<div class="form-group" >
     <p>
         <label for="Name">Name</label>
-
-        @if (Model == null)
-        {
-            <input id="Name" type="text" class="form-control" data-bind="value:Name" />
-            <span class="nameError"></span>
-        }
-        else
-        {
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-
-        }
-
+        <input id="Name" type="text" class="form-control" data-bind="value: Name" />
+        <span class="nameError"></span>
     </p>
 </div>
 <div class="form-group">
     <p>
         <label for="Address">Address</label>
-        @if (Model == null)
-        {
-            <input id="Address" type="text" class="form-control" data-bind="value: Address" />
-            <span class="addressError"></span>
-        }
-        else
-        {
-            <input id="Address" type="text" class="form-control" value="@Model.Address" />
-            <span class="addressError"></span>
-        }
-
+        <input id="Address" type="text" class="form-control" data-bind="value: Address" />
+        <span class="addressError"></span>
     </p>
 </div>
 <div class="form-group">
     <p>
         <label for="Age">Age</label>
-        @if (Model == null)
-        {
-            <input id="Age" type="number" class="form-control" data-bind="value: Age" />
-            <span class="ageError"></span>
-        }
-        else
-        {
-            <input id="Age" type="number" class="form-control" value="@Model.Age" />
-            <span class="ageError"></span>
-        }
+        <input id="Age" type="number" class="form-control" data-bind="value: Age" />
+        <span class="ageError"></span>
     </p>
 </div>
 <div class="form-group">
-
     <label for="Gender">Gender</label>
-    @if (Model == null)
-    {
-        <select id="Gender" class="form-control" data-bind="options: genders, value: Gender"></select>
-    }
-    else
-    {
-        <input id="Gender" class="form-control" value="@Model.Gender" />
-    }
-
+    <input id="Gender" type="text" class="form-control" data-bind="value: Gender" />
+    <span class="genderError"></span>
 </div>
 <div class="form-group">
     <p>
         <label for="PhoneNumber">Contact Number</label>
-        @if (Model == null)
-        {
-            <input id="PhoneNumber" class="form-control" required="required" data-bind="value: PhoneNumber" />
-            <span class="numberError"></span>
-        }
-        else
-        {
-            <input id="PhoneNumber" class="form-control" required="required" value="@Model.PhoneNumber" />
-            <span class="numberError"></span>
-        }
+        <input id="PhoneNumber" class="form-control" required="required" data-bind="value: PhoneNumber" />
+        <span class="numberError"></span>
     </p>
 </div>
-@if (Model == null)
-{
-    <input type="button" id="btnAddUser" class="btn btn-primary" value="Add User" data-bind="click: addUser" />
-}
-else
-{
-    <input type="button" id="btnAddUser" class="btn btn-primary" value="Edit User" data-bind="click: editUser" />
-}
+<input type="button" id="btnAddUser" class="btn btn-primary" value="Add User" data-bind="click: $parent.addUser" />

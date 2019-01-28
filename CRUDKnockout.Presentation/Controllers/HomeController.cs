@@ -46,18 +46,17 @@ namespace CRUDKnockout.Presentation.Controllers
             userModel.PhoneNumber = user.PhoneNumber;
             return PartialView("_RegisterUser",userModel);
         }
-        
+       
         [HttpPost]
-        public JsonResult _GridTest(PageModel pm)
+        public JsonResult _GridTest(PageModel pageModel)
         {
-            if (pm.ID == 0)
+            if (pageModel.ID == 0)
             {
-                pm.ID = 1;
+                pageModel.ID = 1;
             }
-            
-            var dto1 = userDbContext.getTenUser(pm.ID);
-           pm = pageMapper.Map<UserPaginationDTO, PageModel>(dto1);            
-            return Json(pm, JsonRequestBehavior.AllowGet);
+            var dto1 = userDbContext.getTenUser(pageModel.ID);
+            pageModel = pageMapper.Map<UserPaginationDTO, PageModel>(dto1);            
+            return Json(pageModel, JsonRequestBehavior.AllowGet);
         }
        
 
