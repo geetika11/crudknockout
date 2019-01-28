@@ -9,6 +9,7 @@ namespace CRUDKnockout.Presentation
 {
     public class RouteConfig
     {
+        //to register different routes for this app
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");

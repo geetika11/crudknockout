@@ -20,25 +20,9 @@ namespace CRUDKnockout.Presentation.Controllers
     public class UserController : ApiController
     {
         UserBusinessContext businessContext = new UserBusinessContext();
-       
-        [HttpGet]
-        [Route("api/getallusers")]
-        public IList<GetAllUsersDTO> Get( )
-        {
-            //where are the results visible?
-            IList<GetAllUsersDTO> usersList = businessContext.GetAllUsers();
-            if (usersList == null)
-            {
-                return null;
-            }
-            else
-            {
-                var response = Request.CreateResponse(HttpStatusCode.OK);
-                return usersList;
-            }         
-        }
 
         [Route("api/user")]
+        //to add the user
         public HttpResponseMessage Post(UserDetail user)
         {
             if (!ModelState.IsValid)
@@ -51,32 +35,32 @@ namespace CRUDKnockout.Presentation.Controllers
                 bool userstatus = businessContext.InsertUser(user);
                 if (userstatus == true)
                 {
-                    var response = Request.CreateResponse(HttpStatusCode.Created, user);
-                   
+                    var response = Request.CreateResponse(HttpStatusCode.Created, user);                   
                     return response;
                 }
                 else
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is not Added");
+                    return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "User is not Added");
                 }
             }
             else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is null");
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User is null");
             }           
         }
+
         [HttpPost]
         [Route("api/edituser/{ID}")]
-        public void PutCustomer(int ID, UserModel user)
+        public HttpResponseMessage PutCustomer(int ID, UserModel user)
         {
             if (!ModelState.IsValid)
             {
-               // return BadRequest(ModelState);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
 
             if (ID != user.ID)
             {
-               // return BadRequest();
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is not found");
             }
             UserDBContext userdb = new UserDBContext();
             GetAllUsersDTO updateduser = new GetAllUsersDTO();
@@ -86,16 +70,21 @@ namespace CRUDKnockout.Presentation.Controllers
             updateduser.Name = user.Name;
             updateduser.PhoneNumber = user.PhoneNumber;
             updateduser.Gender = user.Gender;
-
-            userdb.update(ID, updateduser);
-           // return StatusCode(HttpStatusCode.NoContent);
+            var response= userdb.update(ID, updateduser);
+            if (response == true)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.OK, "User is updated successfully");
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "User is not updated");
+            }
         }
 
-
+        //Represents a HTTP response message including the status code and data...old way
         [Route("api/deleteuser/{UserID}")]
         public HttpResponseMessage Delete(int UserID)
         {
-            
             bool userstatus= businessContext.DeleteUser(UserID);
             if (userstatus == true)
             {
@@ -104,11 +93,11 @@ namespace CRUDKnockout.Presentation.Controllers
             }
             else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User is not found");
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User is not found");
             }
         }
 
-        
+        //it can support html with razor, new way, how a new response should be treated
         [Route("api/searchuser/{SearchString}")]
         public IHttpActionResult Put(string SearchString)
         {
@@ -125,7 +114,7 @@ namespace CRUDKnockout.Presentation.Controllers
                 }
                 else
                 {
-                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "user list is empty"));
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "user list is empty"));
                 }
             }
         }

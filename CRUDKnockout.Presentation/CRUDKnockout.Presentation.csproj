@@ -202,7 +202,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\EditUser.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserPaginationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

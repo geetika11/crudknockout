@@ -42,7 +42,6 @@ namespace CRUDKnockout.DAL.DBContext
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
-                
                 dbEntities.UserDetail.Add(user);
                 dbEntities.SaveChanges();
                 return true;
@@ -65,7 +64,7 @@ namespace CRUDKnockout.DAL.DBContext
             }
         }
 
-        public void update(int id, GetAllUsersDTO user)
+        public bool update(int id, GetAllUsersDTO user)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
@@ -77,6 +76,7 @@ namespace CRUDKnockout.DAL.DBContext
                 updateItem.Gender = user.Gender;
                 dbEntities.Entry(updateItem).State = System.Data.Entity.EntityState.Modified;
                 dbEntities.SaveChanges();
+                return true;
             }
         }
         
@@ -85,7 +85,6 @@ namespace CRUDKnockout.DAL.DBContext
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
                 IList<GetAllUsersDTO> userList = new List<GetAllUsersDTO>();
-                //  userList= dba.UserDetail.Where(ds => ds.Name.Contains(SearchUser));
                 userList = (from u in dbEntities.UserDetail.Where(ds => ds.Name.Contains(SearchUser))
                             select new GetAllUsersDTO()
                             {

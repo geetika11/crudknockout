@@ -45,7 +45,6 @@ namespace CRUDKnockout.Presentation.Controllers
             userModel.PhoneNumber = user.PhoneNumber;
             return PartialView("_RegisterUser",userModel);
         }
-       
         [HttpPost]
         public JsonResult _GridTest(UserPaginationModel userModel)
         {
@@ -57,7 +56,5 @@ namespace CRUDKnockout.Presentation.Controllers
             userModel = pageMapper.Map<UserPaginationDTO, UserPaginationModel>(dto1);            
             return Json(userModel, JsonRequestBehavior.AllowGet);
         }
-       
-
     }
 }
