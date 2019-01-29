@@ -44,27 +44,78 @@
                 { id: "Gender", name: "Gender", field: "Gender" },
                 { id: "PhoneNumber", name: "PhoneNumber", field: "PhoneNumber" },
                 { id: "delete", name: "Action", width: 70, formatter: buttonFormatter },
-                { id: "edit", name: "Action", width: 70, formatter: button1Formatter }
+                { id: "edit", name: "Action", width: 70, formatter: button1Formatter },
+                { id: "detail", name: "Detail", width: 70, formatter: detailedUser }
             ];
             function buttonFormatter(row, cell, value, columnDef, dataContext) {
-                var button = "<input value='delete 'class='del' onclick='DeleteData(" + dataContext.ID + ")' type='button' id='deletebutton' />";
+                var button = "<input value='Delete 'class='del' onclick='DeleteData(" + dataContext.ID + ")' type='button' id='deletebutton' />";
                 return button;
             }
             function button1Formatter(row, cell, value, columnDef, dataContext) {
-                var button = "<input value='edit 'class='del' onclick='EditData(" + dataContext.ID + ")' type='button'  />";
+                var button = "<input value='Edit 'class='del' onclick='EditData(" + JSON.stringify(dataContext) + ")' type='button'  />";
                 return button;
             }
-            EditData = function (ID) {
-                $(".fade").modal('show')
-                Name = ko.observable();
-                Name(ID)
+            function detailedUser(row, cell, value, columnDef, dataContext) {
+                var button = "<input value='Detail' onclick='Detail(" + JSON.stringify(dataContext) + ")' type='button'  />";
+                return button;
+            }
+
+            //on click of detail button
+            Detail = function (data) {
+                UserRegisterViewModel.tempUser = data;
                 $.ajax({
                     url: '/Home/_RegisterUser',
                     type: "post",
-                    data: ({ ID: ID }),
+                    data: ({ ID: data.ID }),
                     contenttype: 'application/json',
                     success: function (datas) {
-                       console.log('data before clinet', $("#userList").html(datas));
+                        var newdata = '<div class="modal fade" role="dialog" aria-labelledby="mySmallModalLabel" tabindex="-1"style="width:400px;height:500px;align-items:center"> <div class="modal-dialog modal-sm" role="document"><div class="modal-content" data-bind="with: $data.tempUser"><button type="button" class="close" data-dismiss="modal">&times;</button>' + datas + '</div></div></div>';
+                        var ele = document.getElementById("div1")
+                        ele.innerHTML = newdata;
+                        eligible = ko.observable(false);
+                        addUser = function () { }
+                        //occurs when the modal is about to be shown
+                        $("#div1 .modal").on('show.bs.modal', function () {
+                            ko.applyBindings(UserRegisterViewModel, $('#div1 .modal')[0]);
+                        });
+                        //to open the modal
+                        $(".fade").modal('show')
+                        //to disable the mouse
+                        $(".fade").mouseover(function () { $(this).css("pointer-events", "none") })
+                    },
+                })
+            }
+            EditData = function (data) {
+                UserRegisterViewModel.tempUser = data;
+                console.log(data.ID+'value of data id in edit')
+                $.ajax({
+                    url: '/Home/_RegisterUser',
+                    type: "post",
+                    data: ({ ID: data.ID }),
+                    contenttype: 'application/json',
+                    success: function (datas) {
+                        var newdata = '<div class="modal fade"  role="dialog" aria-labelledby="mySmallModalLabel" tabindex="-1"style="width:400px;height:500px;align-items:center"> <div class="modal-dialog modal-sm" role="document"><div class="modal-content" data-bind="with: $data.tempUser"><button type="button" class="close" data-dismiss="modal">&times;</button>' + datas + '<input type="button"  class="btn btn-primary" value="Edit User" data-bind="click: updateuser" /></div></div></div> ';
+                        var ele = document.getElementById("div1")
+                        ele.innerHTML = newdata;
+                        eligible = ko.observable(false);
+                        addUser = function () { }
+                        updateuser = function () {
+                            var dataObject = ko.toJSON(this);
+                            $.ajax({
+                                url: '/api/edituser/' + data.ID,
+                                type: "post",
+                                data: dataObject,
+                                contentType: 'application/json',
+                                success: function (data) {
+                                    alert('User updated successfully')
+                                    $(".fade").modal('hide');
+                                }
+                            });
+                        }
+                        $("#div1 .modal").on('show.bs.modal', function () {
+                            ko.applyBindings(UserRegisterViewModel, $('#div1 .modal')[0]);
+                        });
+                        $(".fade").modal('show')
                     },
                 })
             }

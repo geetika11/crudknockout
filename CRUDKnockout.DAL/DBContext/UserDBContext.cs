@@ -11,33 +11,7 @@ namespace CRUDKnockout.DAL.DBContext
 {
    public class UserDBContext:IDisposable
     {
-        public IList<GetAllUsersDTO> GetAllUsers()
-        {
-            using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
-            {
-                IList<GetAllUsersDTO> userList = new List<GetAllUsersDTO>();
-                userList = (from u in dbEntities.UserDetail
-                            select new GetAllUsersDTO()
-                            {
-                                ID = u.ID,
-                                Address = u.Address,
-                                Name = u.Name,
-                                Age = u.Age,
-                                Gender = u.Gender,
-                               PhoneNumber=u.PhoneNumber
-                            }).ToList();
-                var abc = userList.Count;
-
-                if (userList.Count > 0)
-                {
-                    return userList;
-                }
-                else
-                {
-                    return null;
-                }
-            }           
-        }
+       
         public bool InsertUser(UserDetail user)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
@@ -47,13 +21,11 @@ namespace CRUDKnockout.DAL.DBContext
                 return true;
             }
         }
-
         public  bool DeleteUser(int UserID)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
                 var deleteItem = dbEntities.UserDetail.FirstOrDefault(c => c.ID == UserID);
-
                 if (deleteItem != null)
                 {
                     dbEntities.UserDetail.Remove(deleteItem);
@@ -63,23 +35,28 @@ namespace CRUDKnockout.DAL.DBContext
                 else return false;
             }
         }
-
         public bool update(int id, GetAllUsersDTO user)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
             {
                 var updateItem = dbEntities.UserDetail.FirstOrDefault(c => c.ID == id);
-                updateItem.Address = user.Address;
-                updateItem.Age = user.Age;
-                updateItem.Name = user.Name;
-                updateItem.PhoneNumber = user.PhoneNumber;
-                updateItem.Gender = user.Gender;
-                dbEntities.Entry(updateItem).State = System.Data.Entity.EntityState.Modified;
-                dbEntities.SaveChanges();
-                return true;
+                if (updateItem != null)
+                {
+                    updateItem.Address = user.Address;
+                    updateItem.Age = user.Age;
+                    updateItem.Name = user.Name;
+                    updateItem.PhoneNumber = user.PhoneNumber;
+                    updateItem.Gender = user.Gender;
+                    dbEntities.Entry(updateItem).State = System.Data.Entity.EntityState.Modified;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-        }
-        
+        }        
         public IList<GetAllUsersDTO> SearchUser(string SearchUser)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
@@ -105,7 +82,6 @@ namespace CRUDKnockout.DAL.DBContext
                 }
             }
         }
-
         public UserDetail getUser(int id)
         {
             using (MVCCRUDKNOCKOUTEntities dbEntities = new MVCCRUDKNOCKOUTEntities())
@@ -138,16 +114,11 @@ namespace CRUDKnockout.DAL.DBContext
                 userPaginationDTO.CurrentPage = currentPage;
                 return userPaginationDTO;
             }
-
         }
-
         public void Dispose()
         {
             Dispose();
             GC.SuppressFinalize(this);
         }
-
-       
     }
-
 }

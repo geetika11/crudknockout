@@ -14,18 +14,7 @@ namespace CRUDKnockout.Business.BusinessObject
     {
         UserDBContext dBContext = new UserDBContext();
 
-        public IList<GetAllUsersDTO> GetAllUsers()
-        {
-            IList<GetAllUsersDTO> usersList = dBContext.GetAllUsers();
-            if (usersList != null)
-            {
-                return usersList;
-            }
-            else
-            {
-                return null;
-            }
-        }
+       
         public bool InsertUser(UserDetail user)
         {
             if (user != null)
@@ -56,7 +45,5 @@ namespace CRUDKnockout.Business.BusinessObject
                 return null;
             }
         }
-
-
     }
 }

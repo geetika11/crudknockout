@@ -34,6 +34,8 @@ namespace CRUDKnockout.Presentation.Controllers
             ViewBag.Title = "Home Page";
             return View();
         }
+
+       
         public ActionResult _RegisterUser(UserModel eu)
         {
             UserDetail user = userDbContext.getUser(eu.ID);
